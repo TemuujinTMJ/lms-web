@@ -1,0 +1,24 @@
+.container {
+  height: 100vh;
+  width: 13vw;
+  border-right: 1px solid gray;
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  z-index: 11;
+  background-color: white;
+}
+.menuItem {
+  display: flex;
+  flex-direction: column;
+  width: 65px;
+  text-align: center;
+  font-size: 12px;
+  padding-left: 15px;
+  cursor: pointer;
+  text-decoration: none;
+  color: white;
+}

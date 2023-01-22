@@ -1,0 +1,26 @@
+.container {
+    display: flex;
+    height: 15vh;
+    width: 87vw;
+    border-bottom: 1px solid gray;
+    position: fixed;
+    top: 0px;
+    background-color: white;
+    z-index: 10;
+    box-shadow: 0px 3px 3px gray;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+}
+
+.title {
+    margin-left: 50px;
+    font-size: 36px;
+}
+
+.pro {
+    margin-right: 50px;
+    width: 150px;
+    display: flex;
+    justify-content: space-between;
+}
