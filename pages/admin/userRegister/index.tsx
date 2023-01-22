@@ -65,7 +65,7 @@ const columns = [
   },
 ];
 
-const index = () => {
+const Index = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [type, setType] = useState(1);
 
@@ -145,4 +145,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Index;

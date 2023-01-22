@@ -137,7 +137,6 @@ const Admin = () => {
               Амралтын цаг
               </div>
             </div>
-            {console.log(moment().format('DD'))}
           </div>
           <Calendar onChange={setDate} value={date} />
         </div>

@@ -127,11 +127,12 @@ const columns1 = [
       key: "delete",
     },
   ];
-const index = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [type, setType] = useState(1);
-
+const Index = () => {
+  
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [type, setType] = useState(1)
   const showModal = () => {
+
     setIsModalOpen(true);
   };
 
@@ -142,7 +143,6 @@ const index = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  console.log(type);
   return (
     <div>
       <div className={style.cards}>
@@ -297,4 +297,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Index;
