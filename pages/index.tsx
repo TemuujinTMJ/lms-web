@@ -1,3 +1,4 @@
+import React from "react";
 import { Button, Input } from "antd";
 import Head from "next/head";
 import Image from "next/image";
@@ -5,6 +6,7 @@ import Link from "next/link";
 import style from "../styles/Home.module.css";
 
 const Home =()=> {
+  
   return (
     <>
       <Head>
@@ -38,11 +40,11 @@ const Home =()=> {
         <div className={style.input}>
           <div className={style.span}>КОД</div>
           <Image src="/icons/mail.png" alt={""} width={20} height={20} />
-          <Input placeholder="Код" bordered={false}/>
+          <Input placeholder="Код" bordered={false} required />
         </div>
         <div className={style.input}>
           <Image src="/icons/lock.png" alt={""} width={20} height={20} />
-          <Input placeholder="Нууц үг" bordered={false} />
+          <Input placeholder="Нууц үг" bordered={false} required />
           <div className={style.reset}>Нууц үг мартсан</div>
         </div>
         <Link className={style.btn} href='admin'>
@@ -51,7 +53,7 @@ const Home =()=> {
       </div>
     </>
   );
-}
+  }
 
 Home.getLayout = function getLayout(page: any) {
   return (

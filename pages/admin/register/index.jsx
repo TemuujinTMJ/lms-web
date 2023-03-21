@@ -1,4 +1,5 @@
 import { Button, Card, Form, Input, Modal, Table, Upload } from "antd";
+import axios from "axios";
 import Image from "next/image";
 import React, { useState } from "react";
 import style from "./register.module.css";
@@ -92,34 +93,50 @@ const columns1 = [
   ];
   const columns2 = [
     {
-      title: "TAG ID",
-      dataIndex: "name",
-      key: "name",
+      title: "Төхөөрөмжийн тайлбар",
+      dataIndex: "description_of_goods",
+      key: "description_of_goods",
     },
     {
       title: "Төхөөрөмж нэр",
-      dataIndex: "age",
-      key: "age",
+      dataIndex: "mongolianname",
+      key: "mongolianname",
+    },
+    {
+      title: "Зориулалт",
+      dataIndex: "goodpurpose",
+      key: "goodpurpose",
+    },
+    {
+      title: "Үйлдвэрлэгч",
+      dataIndex: "manufacturer",
+      key: "manufacturer",
     },
     {
       title: "Модель",
-      dataIndex: "address",
-      key: "address",
+      dataIndex: "model_no",
+      key: "model_no",
+    },
+   
+    {
+      title: "Үйлдвэрлэсэн он",
+      dataIndex: "year_of_manufacture",
+      key: "year_of_manufacture",
+    },
+    {
+      title: "TAG ID",
+      dataIndex: "tagid",
+      key: "tagid",
     },
     {
       title: "Сериал дугаар",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "Үйлдвэрлэсэн он",
-      dataIndex: "name",
-      key: "name",
+      dataIndex: "serialnumber",
+      key: "serialnumber",
     },
     {
         title: "Үнэ",
-        dataIndex: "name",
-        key: "name",
+        dataIndex: "price",
+        key: "price",
       },
     {
       title: "",
@@ -128,21 +145,28 @@ const columns1 = [
     },
   ];
 const Index = () => {
-  
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [type, setType] = useState(1)
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [type, setType] = useState(1);
+  const [form] = Form.useForm();
   const showModal = () => {
 
     setIsModalOpen(true);
   };
 
-  const handleOk = () => {
+  const handleSubmit = () => {
     setIsModalOpen(false);
+    axios.post('/api/equipmentNew', form.getFieldsValue(true)).then((response) => {console.log(response)}).catch((e) => {console.log(e)});
   };
 
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+  const [data, setData] = React.useState(null);
+  const axios = require('axios');
+  React.useEffect(() => {
+    axios.get('/api/equipment').then(res => setData(res.data)).catch(err => console.error(err));
+    
+  },[]);
   return (
     <div>
       <div className={style.cards}>
@@ -194,7 +218,7 @@ const Index = () => {
             : "Лаборатори төхөөрөмж нэмэх"}
         </Button>
       </div>
-      <Table dataSource={dataSource} columns={type === 1 ? columns : type === 2 ? columns1 : columns2 } />
+      <Table dataSource={data} columns={type === 1 ? columns : type === 2 ? columns1 : columns2 } />
       <Modal
         title={
           type === 1
@@ -204,11 +228,10 @@ const Index = () => {
             : "Лаборатори төхөөрөмж нэмэх"
         }
         open={isModalOpen}
-        onOk={handleOk}
+        onOk={form.submit}
         onCancel={handleCancel}
         okText="Бүртгэх"
         cancelText="Буцах"
-
       >
         {type === 1 ? (
           <Form
@@ -270,24 +293,34 @@ const Index = () => {
             wrapperCol={{ span: 24 }}
             layout="vertical"
             style={{ maxWidth: 800 }}
+            form={form}
+            onFinish={handleSubmit}
           >
-            <Form.Item label="TAG ID">
+            <Form.Item label="Төхөөрөмжийн тайлбар" name="description_of_goods">
               <Input />
             </Form.Item>
-            <Form.Item label="Төхөөрөмж нэр">
+            <Form.Item label="Төхөөрөмж нэр" name="mongolianname">
               <Input />
             </Form.Item>
-            <Form.Item label="Модель">
+            <Form.Item label="Зориулалт" name="goodpurpose">
               <Input />
             </Form.Item>
-            <Form.Item label="Сериал дугаар">
+            <Form.Item label="Үйлдвэрлэгч" name="manufacturer">
               <Input />
             </Form.Item>
-
-            <Form.Item label="Үйлдвэрлэсэн он">
+            <Form.Item label="Модель" name="model_no">
               <Input />
             </Form.Item>
-            <Form.Item label="Үнэ">
+            <Form.Item label="Үйлдвэрлэсэн он" name="year_of_manufacture">
+              <Input />
+            </Form.Item>
+            <Form.Item label="TAG ID" name="tagId">
+              <Input />
+            </Form.Item>
+            <Form.Item label="Сериал дугаар" name="serialnumber">
+              <Input />
+            </Form.Item>
+            <Form.Item label="Үнэ" name="price">
               <Input />
             </Form.Item>
           </Form>

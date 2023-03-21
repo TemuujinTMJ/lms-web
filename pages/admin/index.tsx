@@ -65,6 +65,7 @@ export const data = {
 
 const Admin = () => {
   const [date, setDate] = useState(new Date());
+
   return (
     <>
       <div className={style.row}>
