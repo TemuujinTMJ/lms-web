@@ -75,6 +75,7 @@ const index = () => {
     
   },[]);
   console.log(data, "data");
+  console.log("jkdsljklsd");
   return (
     <div>
       <div className={style.header}>
