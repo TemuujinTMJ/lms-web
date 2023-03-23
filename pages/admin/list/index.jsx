@@ -1,5 +1,5 @@
 import { Input, Select, Table, Tag } from "antd";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import style from "./list.module.css";
 
 const dataSource = [
@@ -67,13 +67,15 @@ const columns = [
   // },
 ];
 
-const index = () => {
-  const [data, setData] = React.useState(null);
-  const axios = require('axios');
-  React.useEffect(() => {
-    axios.get('/api/equipment').then(res => setData(res.data)).catch(err => console.error(err));
-    
-  },[]);
+const Index = () => {
+  const [data, setData] = useState(null);
+  const axios = require("axios");
+  useEffect(() => {
+    axios
+      .get("/api/equipment")
+      .then((res) => setData(res.data))
+      .catch((err) => console.error(err));
+  }, [axios]);
   console.log(data, "data");
   console.log("jkdsljklsd");
   return (
@@ -93,4 +95,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Index;

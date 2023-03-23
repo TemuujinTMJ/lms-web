@@ -1,0 +1,9 @@
+.row {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding-top: 20px;
+    padding-bottom: 50px;
+    align-items: center;
+}

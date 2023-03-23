@@ -11,11 +11,16 @@ import style from "./navbar.module.css";
 // menu4black.png
 const NavBar = () => {
   const route = useRouter();
-  console.log(route.pathname);
 
   function Title() {
-    switch (route.pathname) {
+    switch (route.asPath) {
       case "/admin":
+        return "Эхлэх";
+        break;
+      case "/user":
+        return "Эхлэх";
+        break;
+      case "/laborant":
         return "Эхлэх";
         break;
       case "/admin/register":
@@ -38,8 +43,14 @@ const NavBar = () => {
     }
   }
   function Icon() {
-    switch (route.pathname) {
+    switch (route.asPath) {
       case "/admin":
+        return "/icons/menu1black.png";
+        break;
+      case "/user":
+        return "/icons/menu1black.png";
+        break;
+      case "/laborant":
         return "/icons/menu1black.png";
         break;
       case "/admin/register":
