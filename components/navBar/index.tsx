@@ -51,7 +51,7 @@ const NavBar = () => {
         return "Захиалгын жагсаалт";
         break;
       default:
-        return "Эхлэх";
+        return "Лабортор";
     }
   }
   function Icon() {
@@ -93,7 +93,7 @@ const NavBar = () => {
         return "/icons/menu4black.png";
         break;
       default:
-        return "/icons/menu1black";
+        return "/icons/menu1black.png";
     }
   }
   return (

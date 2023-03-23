@@ -22,6 +22,7 @@ const columns = [
     title: "Сургууль",
     dataIndex: "school",
     key: "school",
+    link: "key",
   },
   {
     title: "Захиалсан өдөр",

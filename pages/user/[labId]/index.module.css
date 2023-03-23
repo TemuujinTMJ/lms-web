@@ -1,0 +1,25 @@
+.card {
+    border: 1px solid #705F5F;
+    border-radius: 15px;
+    width: 250px;
+    padding: 5px;
+    text-align: center;
+    margin-top: 20px;
+    color: #705F5F;
+    margin-bottom: 20px;
+}
+
+.cols {
+    display: flex;
+    justify-content: center;
+}
+
+.col {
+    display: flex;
+    flex-direction: column;
+}
+
+.text {
+    font-size: 18px;
+    font-weight: 600;
+}
