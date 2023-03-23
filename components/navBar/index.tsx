@@ -11,7 +11,7 @@ import style from "./navbar.module.css";
 // menu4black.png
 const NavBar = () => {
   const route = useRouter();
-
+  console.log(route.asPath);
   function Title() {
     switch (route.asPath) {
       case "/admin":
@@ -20,8 +20,20 @@ const NavBar = () => {
       case "/user":
         return "Эхлэх";
         break;
+      case "/user/orders":
+        return "Захиалгууд";
+        break;
       case "/laborant":
         return "Эхлэх";
+        break;
+      case "/laborant/orderList":
+        return "Захиалга харах";
+        break;
+      case "/laborant/labUsage":
+        return "Лаборатор ашиглалт";
+        break;
+      case "/laborant/report":
+        return "Тайлан";
         break;
       case "/admin/register":
         return "Бүртгэл";
@@ -50,8 +62,20 @@ const NavBar = () => {
       case "/user":
         return "/icons/menu1black.png";
         break;
+      case "/user/orders":
+        return "/icons/menu2black.png";
+        break;
       case "/laborant":
         return "/icons/menu1black.png";
+        break;
+      case "/laborant/orderList":
+        return "/icons/menu2black.png";
+        break;
+      case "/laborant/labUsage":
+        return "/icons/menu3black.png";
+        break;
+      case "/laborant/report":
+        return "/icons/menu4black.png";
         break;
       case "/admin/register":
         return "/icons/menu2black.png";

@@ -7,7 +7,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 const SideMenu = () => {
   const router = useRouter();
-  console.log(router.asPath[1])
   return (
     <div className={style.container}>
       <Image
@@ -191,6 +190,16 @@ const SideMenu = () => {
         height={30}
         style={{ margin: "20px 0px 0px 20px" }}
       />
+
+      <Link href="/">
+        <Image
+          src="/icons/logout.png"
+          alt=""
+          width={30}
+          height={30}
+          style={{ margin: "20px 0px 0px 20px" }}
+        />
+      </Link>
     </div>
   );
 };

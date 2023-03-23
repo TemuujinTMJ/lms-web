@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Input, Modal } from "antd";
+import { Button, Form, Input, Modal } from "antd";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,6 +8,7 @@ import style from "../styles/Home.module.css";
 const Home = () => {
   const [role, setRole] = useState("user");
   const [modal1Open, setModal1Open] = useState(false);
+  const [form] = Form.useForm();
 
   return (
     <>
@@ -153,18 +154,46 @@ const Home = () => {
           </>
         )}
         <Modal
-          title="20px to Top"
+          title="Шинээр хэрэглэгчийн бүртгэл үүсгэх"
           style={{ top: 20 }}
           open={modal1Open}
           onOk={() => setModal1Open(false)}
           onCancel={() => setModal1Open(false)}
+          okText="Бүртгүүлэх"
+          cancelText="Нэвтрэх"
         >
-          <p>some contents...</p>
-          <p>some contents...</p>
-          <p>some contents...</p>
-          <p>some contents...</p>
-          <p>some contents...</p>
-          <p>some contents...</p>
+          <Form
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
+            layout="vertical"
+            style={{ maxWidth: 800 }}
+            form={form}
+          >
+            <Form.Item label="Овог" required name="description_of_goods">
+              <Input />
+            </Form.Item>
+            <Form.Item label="Нэр" required name="mongolianname">
+              <Input />
+            </Form.Item>
+            <Form.Item label="ЗорИ-мэйл хаяг" required name="goodpurpose">
+              <Input />
+            </Form.Item>
+            <Form.Item label="Регистрын дугаар" required name="manufacturer">
+              <Input />
+            </Form.Item>
+            <Form.Item label="Утасны дугаар" required name="model_no">
+              <Input />
+            </Form.Item>
+            <Form.Item label="Хаяг" required name="year_of_manufacture">
+              <Input />
+            </Form.Item>
+            <Form.Item label="Нууц үг" required name="tagId">
+              <Input />
+            </Form.Item>
+            <Form.Item label="Нууц үг давтах" required name="serialnumber">
+              <Input />
+            </Form.Item>
+          </Form>
         </Modal>
       </div>
     </>
