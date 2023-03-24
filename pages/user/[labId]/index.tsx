@@ -1,105 +1,74 @@
-import { Carousel, Col, Image, Row, Table } from "antd";
-import React from "react";
+import {
+  Button,
+  Card,
+  Carousel,
+  Checkbox,
+  Col,
+  Image,
+  Modal,
+  Radio,
+  Row,
+} from "antd";
+import React, { useState } from "react";
 import style from "./index.module.css";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import "react-date-range/dist/styles.css"; // main style file
+import "react-date-range/dist/theme/default.css"; // theme css file
+import { addDays } from "date-fns";
+import { CheckboxValueType } from "antd/es/checkbox/Group";
+import { Calendar, DateRange, RangeKeyDict } from "react-date-range";
+
+dayjs.extend(customParseFormat);
+const hours = [
+  "09:00-10:00",
+  "08:00-09:00",
+  "10:00-11:00",
+  "11:00-12:00",
+  "12:00-13:00",
+  "13:00-14:00",
+  "14:00-15:00",
+  "15:00-16:00",
+  "16:00-17:00",
+  "17:00-18:00",
+  "18:00-19:00",
+  "19:00-20:00",
+];
+
+const disDays = [new Date(), new Date("2023-03-18")];
 
 const Index = () => {
-  const data = [
-    {
-      date: "2023-04-01",
-      hours: [
-        {
-          hour: "08:00",
-          status: "active",
-          devices: [
-            {
-              id: "348334234",
-              status: "active",
-              type: "mac",
-            },
-            {
-              id: "348334234",
-              status: "active",
-              type: "mac",
-            },
-          ],
-        },
-        {
-          hour: "09:00",
-          status: "active",
-          devices: [
-            {
-              id: "348334234",
-              status: "active",
-              type: "mac",
-            },
-            {
-              id: "348334234",
-              status: "active",
-              type: "mac",
-            },
-          ],
-        },
-      ],
-    },
-  ];
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
 
-  const columns = [
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const [date, setDate] = useState(undefined);
+  const [state, setState] = useState([
     {
-      title: "date",
-      dataIndex: "date",
-      key: "date",
+      startDate: new Date(),
+      endDate: undefined,
+      key: "selection",
+      color: undefined,
+      autoFocus: undefined,
+      disabled: undefined,
+      showDateDisplay: undefined,
     },
-    {
-      title: "08:00-09:00",
-      dataIndex: "age",
-      key: "age",
-    },
-    {
-      title: "09:00-10:00",
-      dataIndex: "age",
-      key: "age",
-    },
-    {
-      title: "10:00-11:00",
-      dataIndex: "age",
-      key: "age",
-    },
-    {
-      title: "11:00-12:00",
-      dataIndex: "age",
-      key: "age",
-    },
-    {
-      title: "12:00-13:00",
-      dataIndex: "age",
-      key: "age",
-    },
-    {
-      title: "13:00-14:00",
-      dataIndex: "age",
-      key: "age",
-    },
-    {
-      title: "15:00-16:00",
-      dataIndex: "age",
-      key: "age",
-    },
-    {
-      title: "16:00-17:00",
-      dataIndex: "age",
-      key: "age",
-    },
-    {
-      title: "18:00-19:00",
-      dataIndex: "age",
-      key: "age",
-    },
-    {
-      title: "19:00-20:00",
-      dataIndex: "age",
-      key: "age",
-    },
-  ];
+  ]);
+
+  const onChange = (checkedValues: CheckboxValueType[]) => {
+    console.log("checked = ", checkedValues);
+  };
+
   return (
     <div style={{ padding: "20px" }}>
       <Row>
@@ -156,28 +125,113 @@ const Index = () => {
           </Carousel>
         </Col>
       </Row>
-      <Row style={{ marginTop: "30px" }}>
+      <h1 style={{ marginLeft: "70px" }}>Төхөөрөмжүүд</h1>
+      <Row wrap style={{ margin: "0px 10px 50px 10px" }}>
         <Col span={12} className={style.cols}>
-          <Image
-            alt=""
-            width={400}
-            src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-          />
-        </Col>
-        <Col span={12}>
-          <ul>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-          </ul>
+          <Card
+            hoverable
+            title="IMAC 27inch"
+            extra={<Button onClick={showModal}>Захиалах</Button>}
+          >
+            <div className={style.device}>
+              <Image
+                alt=""
+                width={200}
+                src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+              />
+              <ul style={{ margin: "0px" }}>
+                <li className={style.list}>
+                  <span style={{ fontWeight: "700" }}>- Төхөөрөмж:</span> Mac
+                </li>
+                <li className={style.list}>
+                  <span style={{ fontWeight: "700" }}>- Үйлдвэрлэгч:</span>{" "}
+                  Apple
+                </li>
+                <li className={style.list}>
+                  <span style={{ fontWeight: "700" }}>- Модел:</span> IMac24
+                </li>
+                <li className={style.list}>
+                  <span style={{ fontWeight: "700" }}>- Үйлдвэрлэсэн он:</span>{" "}
+                  2022
+                </li>
+                <li className={style.list}>
+                  <span style={{ fontWeight: "700" }}>- Зориулалт:</span>{" "}
+                  Cургалт, судалгаанд
+                </li>
+              </ul>
+            </div>
+          </Card>
         </Col>
       </Row>
-      <Table dataSource={data} columns={columns} />
+      <Modal
+        title="IMac24"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        width={1000}
+        okText="Захиалах"
+        cancelText="Цуцлах"
+      >
+        <div>
+          <Radio.Group
+            defaultValue="hour"
+            size="large"
+            onChange={(e) => setValue(e?.target?.value)}
+          >
+            <Radio.Button value="hour">Цагаар</Radio.Button>
+            <Radio.Button value="day">Өдрөөр</Radio.Button>
+          </Radio.Group>
+          <Row style={{ marginTop: "20px", marginBottom: "50px" }}>
+            {value === "day" ? (
+              <Col span={24}>
+                <DateRange
+                  editableDateInputs={true}
+                  onChange={(item: any) => setState([item?.selection])}
+                  moveRangeOnFirstSelection={false}
+                  ranges={state}
+                  disabledDates={disDays}
+                />
+              </Col>
+            ) : (
+              <>
+                <Col span={9}>
+                  <div
+                    style={{
+                      border: "1px solid #eeeeee",
+                      paddingBottom: "10px",
+                    }}
+                  >
+                    <Calendar
+                      onChange={(item: any) => setDate(item)}
+                      date={date}
+                    />
+                  </div>
+                </Col>
+                <Col span={12}>
+                  <Checkbox.Group onChange={onChange}>
+                    <Row wrap>
+                      {hours.map((e, key) => {
+                        return (
+                          <Col key={key} span={8} className={style.orderCard}>
+                            <div>{e}</div>
+                            <Checkbox value={e}>Захиалах</Checkbox>
+                          </Col>
+                        );
+                      })}
+                    </Row>
+                  </Checkbox.Group>
+                </Col>
+                <Col
+                  span={3}
+                  style={{ border: "1px solid #eeeeee", paddingBottom: "10px" }}
+                >
+                  Сонголтууд:
+                </Col>
+              </>
+            )}
+          </Row>
+        </div>
+      </Modal>
     </div>
   );
 };

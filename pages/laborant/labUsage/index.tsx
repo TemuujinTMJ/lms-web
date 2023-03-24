@@ -30,14 +30,7 @@ const dataSource = [
     code: "В201900002",
     device: "IMAC",
     date: "2023-02-08 15:30-16:30 ",
-    class: "315",
-    DeviceDamage: "Одоогоор байхгүй",
     description: "Бие даалт хийх",
-    delete: (
-      <>
-        <a>хасах</a> <a>нэмэх</a>
-      </>
-    ),
   },
 ];
 
