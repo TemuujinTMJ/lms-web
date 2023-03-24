@@ -1,3 +1,121 @@
 {
-  "extends": "next/core-web-vitals"
+  // Configuration for JavaScript files
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["react", "unused-imports", "simple-import-sort", "react-hooks", "css-modules", "@typescript-eslint"],
+  "extends": [
+    "airbnb-base",
+    "next/core-web-vitals",
+    "plugin:prettier/recommended",
+    "plugin:css-modules/recommended",
+    "plugin:import/typescript",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "printWidth": 120,
+        "tabWidth": 2,
+        "useTabs": false,
+        "semi": true,
+        "singleQuote": true,
+        "trailingComma": "all",
+        "endOfLine": "auto"
+      }
+    ],
+    "react/jsx-curly-brace-presence": "error",
+    "react/no-find-dom-node": "off",
+    "react/default-props-match-prop-types": "off",
+    "react/sort-comp": "off",
+    "react/display-name": "off",
+    "react/static-property-placement": "off",
+    "react/destructuring-assignment": "off", // Vscode doesn't support automatically destructuring, it's a pain to add a new variable
+    "jsx-a11y/anchor-is-valid": "off", // Next.js use his own internal link system
+    "react/require-default-props": "off", // Allow non-defined react props as undefined
+    "@next/next/no-img-element": "off", // We currently not using next/image because it isn't supported with SSG mode
+    "prefer-regex-literals": "off",
+    "no-unused-vars": "off",
+    "no-param-reassign": "off",
+    "no-nested-ternary": "off",
+    "no-underscore-dangle": "off",
+    "no-use-before-define": "off",
+    "no-duplicate-imports": "error",
+    "css-modules/no-unused-class": "off",
+    "no-plusplus": "off", // ++, -- gj ih bichdeg hvmvvs bn
+    "func-names": "off", // function iig bas nergvi bichih tohiodol baidag bololtoi
+    "@next/next/no-html-link-for-pages": "off", // zarim neg gadaad uri luu redirect hiih ved hereg boloh bolhoor off bolgoloo
+    "camelcase": "off",
+    "import/extensions": 0,
+    "import/no-unresolved": "off",
+    "import/prefer-default-export": "off", // Named export is easier to refactor automatically
+    "import/no-anonymous-default-export": "off",
+    "import/order": "off",
+    "array-callback-return": "off",
+    "import/no-extraneous-dependencies": "off",
+    "import/no-named-default": "off",
+    "@typescript-eslint/no-empty-function": "off",
+    "@typescript-eslint/no-var-requires": "off",
+    "simple-import-sort/exports": "error",
+    "object-shorthand": ["error", "always", { "avoidQuotes": true }],
+    "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
+    "react-hooks/exhaustive-deps": "off",
+    "max-lines": [
+      "error",
+      {
+        "skipBlankLines": true,
+        "skipComments": true
+      }
+    ],
+    "simple-import-sort/imports": [
+      "error",
+      {
+        // React first grouping
+        "groups": [
+          // React first
+          ["^react", "^@?\\w"],
+          // Side effect imports.
+          ["^\\u0000"],
+          // Packages.
+          // Things that start with a letter (or digit or underscore), or `@` followed by a letter.
+          ["^@?\\w"],
+          // Absolute imports and other imports such as Vue-style `@/foo`.
+          // Anything not matched in another group.
+          ["^"],
+          // Relative imports.
+          // Anything that starts with a dot.
+          ["^\\."]
+        ]
+      }
+    ],
+    "unused-imports/no-unused-imports": "error",
+    "unused-imports/no-unused-vars": [
+      "error",
+      {
+        "vars": "all",
+        "varsIgnorePattern": "^_",
+        "args": "after-used",
+        "argsIgnorePattern": "^_"
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "parserOptions": {
+        "project": ["**./tsconfig.json"]
+      },
+      "extends": ["plugin:@typescript-eslint/recommended"],
+      "rules": {
+        "no-shadow": "off",
+        "@typescript-eslint/no-shadow": ["error"],
+        "@typescript-eslint/ban-ts-comment": "off"
+      }
+    }
+  ]
 }

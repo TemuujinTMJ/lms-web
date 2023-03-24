@@ -16,9 +16,20 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "*": ["src/*"],
+      "@/components/*": ["components/*"],
+      "@/modules/*": ["modules/*"],
+      "@/boot/*": ["boot/*"],
+      "@/utils/*": ["utils/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "pages/api/equipment/index.js", "pages/admin/list/index.jsx", "pages/admin/register/index.jsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "pages/api/equipment/index.js",
+    "pages/admin/list/index.jsx",
+    "pages/admin/register/index.jsx"
+  ],
   "exclude": ["node_modules"]
 }
