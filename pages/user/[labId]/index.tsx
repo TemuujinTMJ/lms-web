@@ -1,41 +1,33 @@
-import {
-  Button,
-  Card,
-  Carousel,
-  Checkbox,
-  Col,
-  Image,
-  Modal,
-  Radio,
-  Row,
-} from "antd";
-import React, { useState } from "react";
-import style from "./index.module.css";
-import dayjs from "dayjs";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import "react-date-range/dist/styles.css"; // main style file
-import "react-date-range/dist/theme/default.css"; // theme css file
-import { addDays } from "date-fns";
-import { CheckboxValueType } from "antd/es/checkbox/Group";
-import { Calendar, DateRange, RangeKeyDict } from "react-date-range";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useState } from 'react';
+import { Calendar, DateRange } from 'react-date-range';
+import { Button, Card, Carousel, Checkbox, Col, Image, Modal, Radio, Row } from 'antd';
+import { CheckboxValueType } from 'antd/es/checkbox/Group';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
+
+import style from './index.module.css';
 
 dayjs.extend(customParseFormat);
 const hours = [
-  "09:00-10:00",
-  "08:00-09:00",
-  "10:00-11:00",
-  "11:00-12:00",
-  "12:00-13:00",
-  "13:00-14:00",
-  "14:00-15:00",
-  "15:00-16:00",
-  "16:00-17:00",
-  "17:00-18:00",
-  "18:00-19:00",
-  "19:00-20:00",
+  '09:00-10:00',
+  '08:00-09:00',
+  '10:00-11:00',
+  '11:00-12:00',
+  '12:00-13:00',
+  '13:00-14:00',
+  '14:00-15:00',
+  '15:00-16:00',
+  '16:00-17:00',
+  '17:00-18:00',
+  '18:00-19:00',
+  '19:00-20:00',
 ];
 
-const disDays = [new Date(), new Date("2023-03-18")];
+const disDays = [new Date(), new Date('2023-03-18')];
 
 const Index = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -57,7 +49,7 @@ const Index = () => {
     {
       startDate: new Date(),
       endDate: undefined,
-      key: "selection",
+      key: 'selection',
       color: undefined,
       autoFocus: undefined,
       disabled: undefined,
@@ -66,11 +58,12 @@ const Index = () => {
   ]);
 
   const onChange = (checkedValues: CheckboxValueType[]) => {
-    console.log("checked = ", checkedValues);
+    // eslint-disable-next-line no-console
+    console.log('checked = ', checkedValues);
   };
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div style={{ padding: '20px' }}>
       <Row>
         <Col className={style.cols} span={8}>
           <div className={style.col}>
@@ -111,7 +104,7 @@ const Index = () => {
       </Row>
       <Row>
         <Col span={12} className={style.cols}>
-          <Carousel autoplay style={{ width: "400px" }}>
+          <Carousel autoplay style={{ width: '400px' }}>
             <Image
               alt=""
               width={400}
@@ -125,38 +118,31 @@ const Index = () => {
           </Carousel>
         </Col>
       </Row>
-      <h1 style={{ marginLeft: "70px" }}>Төхөөрөмжүүд</h1>
-      <Row wrap style={{ margin: "0px 10px 50px 10px" }}>
+      <h1 style={{ marginLeft: '70px' }}>Төхөөрөмжүүд</h1>
+      <Row wrap style={{ margin: '0px 10px 50px 10px' }}>
         <Col span={12} className={style.cols}>
-          <Card
-            hoverable
-            title="IMAC 27inch"
-            extra={<Button onClick={showModal}>Захиалах</Button>}
-          >
+          <Card hoverable title="IMAC 27inch" extra={<Button onClick={showModal}>Захиалах</Button>}>
             <div className={style.device}>
               <Image
                 alt=""
                 width={200}
                 src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
               />
-              <ul style={{ margin: "0px" }}>
+              <ul style={{ margin: '0px' }}>
                 <li className={style.list}>
-                  <span style={{ fontWeight: "700" }}>- Төхөөрөмж:</span> Mac
+                  <span style={{ fontWeight: '700' }}>- Төхөөрөмж:</span> Mac
                 </li>
                 <li className={style.list}>
-                  <span style={{ fontWeight: "700" }}>- Үйлдвэрлэгч:</span>{" "}
-                  Apple
+                  <span style={{ fontWeight: '700' }}>- Үйлдвэрлэгч:</span> Apple
                 </li>
                 <li className={style.list}>
-                  <span style={{ fontWeight: "700" }}>- Модел:</span> IMac24
+                  <span style={{ fontWeight: '700' }}>- Модел:</span> IMac24
                 </li>
                 <li className={style.list}>
-                  <span style={{ fontWeight: "700" }}>- Үйлдвэрлэсэн он:</span>{" "}
-                  2022
+                  <span style={{ fontWeight: '700' }}>- Үйлдвэрлэсэн он:</span> 2022
                 </li>
                 <li className={style.list}>
-                  <span style={{ fontWeight: "700" }}>- Зориулалт:</span>{" "}
-                  Cургалт, судалгаанд
+                  <span style={{ fontWeight: '700' }}>- Зориулалт:</span> Cургалт, судалгаанд
                 </li>
               </ul>
             </div>
@@ -173,16 +159,12 @@ const Index = () => {
         cancelText="Цуцлах"
       >
         <div>
-          <Radio.Group
-            defaultValue="hour"
-            size="large"
-            onChange={(e) => setValue(e?.target?.value)}
-          >
+          <Radio.Group defaultValue="hour" size="large" onChange={(e) => setValue(e?.target?.value)}>
             <Radio.Button value="hour">Цагаар</Radio.Button>
             <Radio.Button value="day">Өдрөөр</Radio.Button>
           </Radio.Group>
-          <Row style={{ marginTop: "20px", marginBottom: "50px" }}>
-            {value === "day" ? (
+          <Row style={{ marginTop: '20px', marginBottom: '50px' }}>
+            {value === 'day' ? (
               <Col span={24}>
                 <DateRange
                   editableDateInputs={true}
@@ -197,14 +179,11 @@ const Index = () => {
                 <Col span={9}>
                   <div
                     style={{
-                      border: "1px solid #eeeeee",
-                      paddingBottom: "10px",
+                      border: '1px solid #eeeeee',
+                      paddingBottom: '10px',
                     }}
                   >
-                    <Calendar
-                      onChange={(item: any) => setDate(item)}
-                      date={date}
-                    />
+                    <Calendar onChange={(item: any) => setDate(item)} date={date} />
                   </div>
                 </Col>
                 <Col span={12}>
@@ -221,10 +200,7 @@ const Index = () => {
                     </Row>
                   </Checkbox.Group>
                 </Col>
-                <Col
-                  span={3}
-                  style={{ border: "1px solid #eeeeee", paddingBottom: "10px" }}
-                >
+                <Col span={3} style={{ border: '1px solid #eeeeee', paddingBottom: '10px' }}>
                   Сонголтууд:
                 </Col>
               </>

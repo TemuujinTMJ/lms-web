@@ -7,6 +7,6 @@ export const config =
       }
     : NODE_ENV === 'development'
     ? {
-        HOST: 'localhost:3001/api',
+        HOST: 'http://192.168.0.150:3001/api',
       }
     : {};

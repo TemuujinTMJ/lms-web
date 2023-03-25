@@ -5,7 +5,7 @@ import { api } from '@/boot/baseApi';
 
 export const getAdminTeacher = createAsyncThunk('admin/teacher/get', async (data: object) => {
   const url = `/admin/teacher/get?${queryString.stringify(data)}`;
-  return api.get(url).then((response) => response.data);
+  return api.post(url, data).then((response) => response.data);
 });
 
 export const postAdminTeacher = createAsyncThunk('admin/teacher/post', async (data: object) => {

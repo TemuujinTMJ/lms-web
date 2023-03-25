@@ -1,5 +1,6 @@
-import { Input, Select, Table, Tag } from 'antd';
 import React from 'react';
+import { Input, Select, Table, Tag } from 'antd';
+
 import style from './lab.module.css';
 
 const dataSource = [

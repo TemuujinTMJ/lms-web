@@ -2,15 +2,14 @@ import { message } from 'antd';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-import { config } from './config';
+// import { config } from './config';
 
 export const token = Cookies.get('token') || null;
 
 const axiosConfig = {
-  baseURL: config.HOST,
+  baseURL: 'http://192.168.0.150:3001/api',
   timeout: 30000,
 };
-
 export const api = axios.create(axiosConfig);
 
 api.interceptors.response.use(

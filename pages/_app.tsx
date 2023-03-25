@@ -21,14 +21,20 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => page);
 
   if (Component.getLayout) {
-    return Component.getLayout(<Component {...pageProps} />);
+    return Component.getLayout(
+      <Provider store={store}>
+        <Component {...pageProps} />
+      </Provider>,
+    );
   }
 
-  return getLayout(
+  return (
     <Provider store={store}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </Provider>,
+      {getLayout(
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>,
+      )}
+    </Provider>
   );
 }

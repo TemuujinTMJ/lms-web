@@ -1,17 +1,18 @@
-import { Button, Form, Input, Modal, Select, Table, Tag } from "antd";
-import React, { useState } from "react";
-import style from "./userRegister.module.css";
+import React from 'react';
+import { Table } from 'antd';
+
+import style from './userRegister.module.css';
 
 const dataSource = [
   {
-    key: "1",
-    name: "Э.Тэнгис",
-    code: "В201900002",
-    device: "IMAC",
-    date: "2023-02-08 15:30-16:30 ",
-    class: "315",
-    DeviceDamage: "Одоогоор байхгүй",
-    description: "Бие даалт хийх",
+    key: '1',
+    name: 'Э.Тэнгис',
+    code: 'В201900002',
+    device: 'IMAC',
+    date: '2023-02-08 15:30-16:30 ',
+    class: '315',
+    DeviceDamage: 'Одоогоор байхгүй',
+    description: 'Бие даалт хийх',
     delete: (
       <>
         <a>хасах</a> <a>нэмэх</a>
@@ -22,45 +23,45 @@ const dataSource = [
 
 const columns = [
   {
-    title: "Захиалга өгсөн оюутны нэр",
-    dataIndex: "name",
-    key: "name",
+    title: 'Захиалга өгсөн оюутны нэр',
+    dataIndex: 'name',
+    key: 'name',
   },
   {
-    title: "Оюутны код",
-    dataIndex: "code",
-    key: "code",
+    title: 'Оюутны код',
+    dataIndex: 'code',
+    key: 'code',
   },
   {
-    title: "Хэрэглэх төхөөрөмж",
-    dataIndex: "device",
-    key: "device",
+    title: 'Хэрэглэх төхөөрөмж',
+    dataIndex: 'device',
+    key: 'device',
   },
   {
-    title: "Хугацаагаа",
-    dataIndex: "date",
-    key: "date",
+    title: 'Хугацаагаа',
+    dataIndex: 'date',
+    key: 'date',
   },
   {
-    title: "Анги",
-    dataIndex: "class",
-    key: "class",
+    title: 'Анги',
+    dataIndex: 'class',
+    key: 'class',
   },
   {
-    title: "Төхөөрөмжийн гэмтэл",
-    dataIndex: "DeviceDamage",
-    key: "DeviceDamage",
+    title: 'Төхөөрөмжийн гэмтэл',
+    dataIndex: 'DeviceDamage',
+    key: 'DeviceDamage',
   },
   {
-    title: "Мэдэгдэл",
-    dataIndex: "description",
-    key: "description",
+    title: 'Мэдэгдэл',
+    dataIndex: 'description',
+    key: 'description',
   },
 
   {
-    title: "Батгаажуулалт",
-    dataIndex: "delete",
-    key: "delete",
+    title: 'Батгаажуулалт',
+    dataIndex: 'delete',
+    key: 'delete',
   },
 ];
 

@@ -1,237 +1,258 @@
-import { Button, Card, Form, Input, Modal, Table, Upload } from "antd";
-import axios from "axios";
-import Image from "next/image";
-import React, { useState } from "react";
-import style from "./register.module.css";
+/* eslint-disable max-lines */
+import React, { useEffect, useState } from 'react';
+import { Button, Form, Input, message, Modal, Space, Table, Upload } from 'antd';
+import Image from 'next/image';
 
-//dummy data 
-const dataSource = [
-  {
-    key: "1",
-    name: "Mike",
-    age: 32,
-    address: "10 Downing Street",
-    delete: <a>хасах</a>
-  },
-  {
-    key: "2",
-    name: "John",
-    age: 42,
-    address: "10 Downing Street",
-    delete: <a>хасах</a>
-  },
-];
+import { getAdminDevice, postAdminDevice } from '@/modules/admin/device/device.services';
+import { getAdminLaboratory, postAdminLaboratory } from '@/modules/admin/laboratory/laboratory.services';
+import { getAdminTeacher, postAdminTeacher } from '@/modules/admin/teacher/teacher.services';
+import { useAppDispatch, useAppSelector } from '@/modules/hooks';
 
-const columns = [
-  {
-    title: "Сургууль",
-    dataIndex: "name",
-    key: "name",
-  },
-  {
-    title: "Давхар",
-    dataIndex: "age",
-    key: "age",
-  },
-  {
-    title: "Лабораторын ангийн дугаар",
-    dataIndex: "address",
-    key: "address",
-  },
-  {
-    title: "Хариуцсан багшийн нэр",
-    dataIndex: "name",
-    key: "name",
-  },
-  {
-    title: "Лабораторийн ангийн зураг",
-    dataIndex: "name",
-    key: "name",
-  },
-  {
-    title: "",
-    dataIndex: "delete",
-    key: "delete",
-  },
-];
-const columns1 = [
+import style from './register.module.css';
+
+const Index = () => {
+  const dataSource = [
     {
-      title: "Овог",
-      dataIndex: "name",
-      key: "name",
+      key: '1',
+      last_name: 'Mi10 Downing Streetke',
+      age: 32,
+      first_name: '10 Downing Street',
     },
-    {
-      title: "Нэр",
-      dataIndex: "age",
-      key: "age",
-    },
-    {
-      title: "Багшийн код",
-      dataIndex: "address",
-      key: "address",
-    },
-    {
-      title: "Утасны дугаар",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "Хаяг",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "E-mail",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-        title: "",
-        dataIndex: "delete",
-        key: "delete",
-      },
   ];
+
+  const columns = [
+    {
+      title: 'Сургууль',
+      dataIndex: 'school',
+      key: 'school',
+    },
+    {
+      title: 'Давхар',
+      dataIndex: 'floor',
+      key: 'floor',
+    },
+    {
+      title: 'Лабораторын ангийн дугаар',
+      dataIndex: 'room',
+      key: 'room',
+    },
+    {
+      title: 'Хариуцсан багшийн нэр',
+      dataIndex: 'teacher',
+      key: 'teacher',
+    },
+    {
+      title: 'Лабораторийн ангийн зураг',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (_, record) => (
+        <Space size="middle">
+          <a>Invite {record.name}</a>
+          <a>Delete</a>
+        </Space>
+      ),
+    },
+  ];
+  const columns1 = [
+    {
+      title: 'Овог',
+      dataIndex: 'last_name',
+      key: 'last_name',
+    },
+    {
+      title: 'Нэр',
+      dataIndex: 'first_name',
+      key: 'first_name',
+    },
+    {
+      title: 'Багшийн код',
+      dataIndex: 'code',
+      key: 'code',
+    },
+    {
+      title: 'Утасны дугаар',
+      dataIndex: 'phone',
+      key: 'phone',
+    },
+    {
+      title: 'Хаяг',
+      dataIndex: 'room',
+      key: 'address',
+    },
+    {
+      title: 'E-mail',
+      dataIndex: 'email',
+      key: 'email',
+    },
+    {
+      title: 'operation',
+      dataIndex: 'operation',
+      render: (_, record) => <Button onClick={() => Edit(record)}>edit</Button>,
+    },
+  ];
+
   const columns2 = [
     {
-      title: "Төхөөрөмжийн тайлбар",
-      dataIndex: "description_of_goods",
-      key: "description_of_goods",
+      title: 'Төхөөрөмж нэр',
+      dataIndex: 'mongolianname',
+      key: 'mongolianname',
     },
     {
-      title: "Төхөөрөмж нэр",
-      dataIndex: "mongolianname",
-      key: "mongolianname",
+      title: 'Үйлдвэрлэгч',
+      dataIndex: 'manufacturer',
+      key: 'manufacturer',
     },
     {
-      title: "Зориулалт",
-      dataIndex: "goodpurpose",
-      key: "goodpurpose",
+      title: 'Модель',
+      dataIndex: 'model',
+      key: 'model',
+    },
+
+    {
+      title: 'Үйлдвэрлэсэн он',
+      dataIndex: 'manufacturedDate',
+      key: 'manufacturedDate',
     },
     {
-      title: "Үйлдвэрлэгч",
-      dataIndex: "manufacturer",
-      key: "manufacturer",
+      title: 'TAG ID',
+      dataIndex: 'tagID',
+      key: 'tagID',
     },
     {
-      title: "Модель",
-      dataIndex: "model_no",
-      key: "model_no",
-    },
-   
-    {
-      title: "Үйлдвэрлэсэн он",
-      dataIndex: "year_of_manufacture",
-      key: "year_of_manufacture",
+      title: 'Сериал дугаар',
+      dataIndex: 'serial',
+      key: 'serial',
     },
     {
-      title: "TAG ID",
-      dataIndex: "tagid",
-      key: "tagid",
+      title: 'Үнэ',
+      dataIndex: 'price',
+      key: 'price',
     },
     {
-      title: "Сериал дугаар",
-      dataIndex: "serialnumber",
-      key: "serialnumber",
-    },
-    {
-        title: "Үнэ",
-        dataIndex: "price",
-        key: "price",
+      key: 'key',
+      render: () => {
+        return <Button>Засах</Button>;
       },
-    {
-      title: "",
-      dataIndex: "delete",
-      key: "delete",
     },
   ];
-const Index = () => {
+
+  function Edit() {
+    setIsModalOpen(true);
+  }
+  const dispatch = useAppDispatch();
+  // const { teachers } = useAppSelector((state) => state.adminTeacherReducer);
+  const { laboratories } = useAppSelector((state) => state.adminLaboratoryReducer);
+  const { devices } = useAppSelector((state) => state.adminDeviceReducer);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [type, setType] = useState(1);
   const [form] = Form.useForm();
+  const [form1] = Form.useForm();
+  const [form2] = Form.useForm();
+
   const showModal = () => {
-
     setIsModalOpen(true);
-  };
-
-  const handleSubmit = () => {
-    setIsModalOpen(false);
-    axios.post('/api/equipmentNew', form.getFieldsValue(true)).then((response) => {console.log(response)}).catch((e) => {console.log(e)});
   };
 
   const handleCancel = () => {
     setIsModalOpen(false);
   };
-  const [data, setData] = React.useState(null);
-  const axios = require('axios');
-  React.useEffect(() => {
-    axios.get('/api/equipment').then(res => setData(res.data)).catch(err => console.error(err));
-    
-  },[]);
+  useEffect(() => {
+    dispatch(
+      getAdminTeacher({
+        pageSize: 10,
+        pageNum: 0,
+      }),
+    );
+    dispatch(
+      getAdminDevice({
+        pageSize: 10,
+        pageNum: 0,
+      }),
+    );
+    dispatch(
+      getAdminLaboratory({
+        pageSize: 10,
+        pageNum: 0,
+      }),
+    );
+  }, []);
+  const [messageApi, contextHolder] = message.useMessage();
+  const success = () => {
+    messageApi.open({
+      type: 'success',
+      content: 'Хэрэглэгч амжилттай бүртгэгдлээ',
+    });
+  };
+  function onFinishLaboratory(values) {
+    dispatch(postAdminDevice(values)).then((e) => {
+      if (e?.payload?.success) {
+        success();
+      }
+    });
+  }
+  function onFinishTeacher(values) {
+    dispatch(postAdminTeacher(values)).then((e) => {
+      if (e?.payload?.success) {
+        success();
+      }
+    });
+  }
+  function onFinishDevice(values) {
+    dispatch(postAdminLaboratory(values)).then((e) => {
+      if (e?.payload?.success) {
+        success();
+      }
+    });
+  }
   return (
     <div>
+      {contextHolder}
       <div className={style.cards}>
         <div className={style.card} onClick={() => setType(1)}>
-          <Image
-            src="/icons/checkList.png"
-            alt=""
-            width={50}
-            height={50}
-            style={{ margin: "20px" }}
-          />
+          <Image src="/icons/checkList.png" alt="" width={50} height={50} style={{ margin: '20px' }} />
           Лабораторын анги бүртгэл
         </div>
         <div className={style.card} onClick={() => setType(2)}>
-          <Image
-            src="/icons/user-tie.png"
-            alt=""
-            width={50}
-            height={50}
-            style={{ margin: "20px" }}
-          />
+          <Image src="/icons/user-tie.png" alt="" width={50} height={50} style={{ margin: '20px' }} />
           Лаборатори хариуцсан багшийн бүртгэл
         </div>
         <div className={style.card} onClick={() => setType(3)}>
-          <Image
-            src="/icons/note.png"
-            alt=""
-            width={50}
-            height={50}
-            style={{ margin: "20px" }}
-          />
+          <Image src="/icons/note.png" alt="" width={50} height={50} style={{ margin: '20px' }} />
           Лабораторийн төхөөрөмж бүртгэл
         </div>
       </div>
       <div className={style.subTitle}>
         Бүртгэл харах
         <Button type="primary" onClick={showModal}>
-          <Image
-            src="/icons/add.png"
-            alt=""
-            width={10}
-            height={10}
-            style={{ marginRight: "10px" }}
-          />{" "}
+          <Image src="/icons/add.png" alt="" width={10} height={10} style={{ marginRight: '10px' }} />{' '}
           {type === 1
-            ? "Лабораторийн анги нэмэх"
+            ? 'Лабораторийн анги нэмэх'
             : type === 2
-            ? "Лаборатори хариуцсан багш нэмэх"
-            : "Лаборатори төхөөрөмж нэмэх"}
+            ? 'Лаборатори хариуцсан багш нэмэх'
+            : 'Лаборатори төхөөрөмж нэмэх'}
         </Button>
       </div>
-      <Table dataSource={data} columns={type === 1 ? columns : type === 2 ? columns1 : columns2 } />
+      <Table
+        dataSource={type === 1 ? laboratories : type === 2 ? dataSource : devices}
+        columns={type === 1 ? columns : type === 2 ? columns1 : columns2}
+      />
       <Modal
         title={
           type === 1
-            ? "Лабораторийн анги нэмэх"
+            ? 'Лабораторийн анги нэмэх'
             : type === 2
-            ? "Лаборатори хариуцсан багш нэмэх"
-            : "Лаборатори төхөөрөмж нэмэх"
+            ? 'Лаборатори хариуцсан багш нэмэх'
+            : 'Лаборатори төхөөрөмж нэмэх'
         }
         open={isModalOpen}
         onOk={form.submit}
         onCancel={handleCancel}
-        okText="Бүртгэх"
         cancelText="Буцах"
+        footer={false}
       >
         {type === 1 ? (
           <Form
@@ -239,26 +260,33 @@ const Index = () => {
             wrapperCol={{ span: 24 }}
             layout="vertical"
             style={{ maxWidth: 800 }}
+            form={form2}
+            onFinish={onFinishLaboratory}
           >
-            <Form.Item label="Сургууль">
+            <Form.Item label="Сургууль" name="school">
               <Input />
             </Form.Item>
-            <Form.Item label="Давхар">
+            <Form.Item label="Давхар" name="floor">
               <Input />
             </Form.Item>
-            <Form.Item label="Лаботароийн ангийн дугаар">
+            <Form.Item label="Лаботароийн ангийн дугаар" name="room">
               <Input />
             </Form.Item>
-            <Form.Item label="Хариуцсан багшийн нэр">
+            <Form.Item label="Хариуцсан багшийн нэр" name="teacher">
               <Input />
             </Form.Item>
 
-            <Form.Item label="Зураг оруулах" valuePropName="fileList">
+            <Form.Item label="Зураг оруулах" valuePropName="fileList" name="medias">
               <Upload action="/upload.do" listType="picture-card">
                 <div>
                   <div style={{ marginTop: 8 }}>Зураг оруулах</div>
                 </div>
               </Upload>
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Бүртгүүлэх
+              </Button>
             </Form.Item>
           </Form>
         ) : null}
@@ -268,22 +296,31 @@ const Index = () => {
             wrapperCol={{ span: 24 }}
             layout="vertical"
             style={{ maxWidth: 800 }}
+            form={form1}
+            onFinish={onFinishTeacher}
           >
-            <Form.Item label="Овог">
+            <Form.Item label="Овог" name="last_name">
               <Input />
             </Form.Item>
-            <Form.Item label="Нэр">
+            <Form.Item label="Нэр" name="first_name">
               <Input />
             </Form.Item>
-            <Form.Item label="Лаботароийн ангийн дугаар">
+            <Form.Item label="Лаботароийн ангийн дугаар" name="address">
               <Input />
             </Form.Item>
-            <Form.Item label="e-mail хаяг">
+            <Form.Item label="e-mail хаяг" name="email">
               <Input />
             </Form.Item>
-
+            <Form.Item label="Нууц үг" name="password">
+              <Input />
+            </Form.Item>
             <Form.Item label="Зураг оруулах">
-            <Input />
+              <Input />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Бүртгүүлэх
+              </Button>
             </Form.Item>
           </Form>
         ) : null}
@@ -294,34 +331,39 @@ const Index = () => {
             layout="vertical"
             style={{ maxWidth: 800 }}
             form={form}
-            onFinish={handleSubmit}
+            onFinish={onFinishDevice}
           >
-            <Form.Item label="Төхөөрөмжийн тайлбар" name="description_of_goods">
+            <Form.Item label="Төхөөрөмжийн тайлбар" name="title">
               <Input />
             </Form.Item>
-            <Form.Item label="Төхөөрөмж нэр" name="mongolianname">
+            <Form.Item label="Төхөөрөмж нэр" name="title">
               <Input />
             </Form.Item>
-            <Form.Item label="Зориулалт" name="goodpurpose">
+            <Form.Item label="Лабортор" name="laboratory">
               <Input />
             </Form.Item>
             <Form.Item label="Үйлдвэрлэгч" name="manufacturer">
               <Input />
             </Form.Item>
-            <Form.Item label="Модель" name="model_no">
+            <Form.Item label="Модель" name="model">
               <Input />
             </Form.Item>
-            <Form.Item label="Үйлдвэрлэсэн он" name="year_of_manufacture">
+            <Form.Item label="Үйлдвэрлэсэн он" name="manufacturedDate">
               <Input />
             </Form.Item>
-            <Form.Item label="TAG ID" name="tagId">
+            <Form.Item label="TAG ID" name="tagID">
               <Input />
             </Form.Item>
-            <Form.Item label="Сериал дугаар" name="serialnumber">
+            <Form.Item label="Сериал дугаар" name="serial">
               <Input />
             </Form.Item>
             <Form.Item label="Үнэ" name="price">
               <Input />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Бүртгүүлэх
+              </Button>
             </Form.Item>
           </Form>
         ) : null}
