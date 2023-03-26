@@ -1,4 +1,5 @@
 import React from 'react';
+import Cookies from 'js-cookie';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -36,14 +37,6 @@ const SideMenu = () => {
           <Link href="/admin/lab" className={style.menuItem}>
             <Image src="/icons/menu3.png" alt="" width={25} height={25} style={{ margin: '20px 0px 0px 20px' }} />
             Лаборатор ашиглалт
-          </Link>
-          <Link href="/admin/list" className={style.menuItem}>
-            <Image src="/icons/menu4.png" alt="" width={25} height={25} style={{ margin: '20px 0px 0px 20px' }} />
-            Жагсаалт
-          </Link>
-          <Link href="/admin/userRegister" className={style.menuItem}>
-            <Image src="/icons/menu3.png" alt="" width={25} height={25} style={{ margin: '20px 0px 0px 20px' }} />
-            Хэрэглэгчийн бүртгэл
           </Link>
           <Link href="/admin/orderList" className={style.menuItem}>
             <Image src="/icons/menu4.png" alt="" width={25} height={25} style={{ margin: '20px 0px 0px 20px' }} />
@@ -108,7 +101,7 @@ const SideMenu = () => {
 
       <Image src="/icons/settings.png" alt="" width={30} height={30} style={{ margin: '20px 0px 0px 20px' }} />
 
-      <Link href="/">
+      <Link href="/" onClick={() => Cookies.remove('token')}>
         <Image src="/icons/logout.png" alt="" width={30} height={30} style={{ margin: '20px 0px 0px 20px' }} />
       </Link>
     </div>

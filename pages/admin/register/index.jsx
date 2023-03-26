@@ -1,25 +1,23 @@
 /* eslint-disable max-lines */
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Input, message, Modal, Space, Table, Upload } from 'antd';
+import { Button, DatePicker, Form, Input, InputNumber, message, Modal, Popconfirm, Select, Table, Upload } from 'antd';
+import dayjs from 'dayjs';
+import moment from 'moment';
 import Image from 'next/image';
 
-import { getAdminDevice, postAdminDevice } from '@/modules/admin/device/device.services';
-import { getAdminLaboratory, postAdminLaboratory } from '@/modules/admin/laboratory/laboratory.services';
-import { getAdminTeacher, postAdminTeacher } from '@/modules/admin/teacher/teacher.services';
+import { deleteAdminDevice, getAdminDevice, postAdminDevice } from '@/modules/admin/device/device.services';
+import {
+  deleteAdminLaboratory,
+  getAdminLaboratory,
+  postAdminLaboratory,
+} from '@/modules/admin/laboratory/laboratory.services';
+import { deleteAdminTeacher, getAdminTeacher, postAdminTeacher } from '@/modules/admin/teacher/teacher.services';
+import { deleteAdminUser, getAdminUser, postAdminUser } from '@/modules/admin/user/user.services';
 import { useAppDispatch, useAppSelector } from '@/modules/hooks';
 
 import style from './register.module.css';
 
 const Index = () => {
-  const dataSource = [
-    {
-      key: '1',
-      last_name: 'Mi10 Downing Streetke',
-      age: 32,
-      first_name: '10 Downing Street',
-    },
-  ];
-
   const columns = [
     {
       title: 'Сургууль',
@@ -47,16 +45,40 @@ const Index = () => {
       key: 'name',
     },
     {
-      title: 'Action',
-      key: 'action',
-      render: (_, record) => (
-        <Space size="middle">
-          <a>Invite {record.name}</a>
-          <a>Delete</a>
-        </Space>
-      ),
+      render: (_, record) => <Button onClick={() => Edit(record)}>Засах</Button>,
     },
   ];
+  const columns0 = [
+    {
+      title: 'Овог',
+      dataIndex: 'last_name',
+      key: 'last_name',
+    },
+    {
+      title: 'Нэр',
+      dataIndex: 'first_name',
+      key: 'first_name',
+    },
+    {
+      title: 'Утасны дугаар',
+      dataIndex: 'phone',
+      key: 'phone',
+    },
+    {
+      title: 'Хаяг',
+      dataIndex: 'address',
+      key: 'address',
+    },
+    {
+      title: 'E-mail',
+      dataIndex: 'email',
+      key: 'email',
+    },
+    {
+      render: (_, record) => <Button onClick={() => Edit(record)}>Засах</Button>,
+    },
+  ];
+
   const columns1 = [
     {
       title: 'Овог',
@@ -80,7 +102,7 @@ const Index = () => {
     },
     {
       title: 'Хаяг',
-      dataIndex: 'room',
+      dataIndex: 'address',
       key: 'address',
     },
     {
@@ -89,33 +111,31 @@ const Index = () => {
       key: 'email',
     },
     {
-      title: 'operation',
-      dataIndex: 'operation',
-      render: (_, record) => <Button onClick={() => Edit(record)}>edit</Button>,
+      render: (_, record) => <Button onClick={() => Edit(record)}>Засах</Button>,
     },
   ];
 
   const columns2 = [
     {
       title: 'Төхөөрөмж нэр',
-      dataIndex: 'mongolianname',
-      key: 'mongolianname',
+      dataIndex: 'title',
+      key: 'title',
     },
     {
-      title: 'Үйлдвэрлэгч',
-      dataIndex: 'manufacturer',
-      key: 'manufacturer',
+      title: 'Лаборатор',
+      dataIndex: 'laboratory',
+      key: 'laboratory',
     },
     {
       title: 'Модель',
       dataIndex: 'model',
       key: 'model',
     },
-
     {
       title: 'Үйлдвэрлэсэн он',
       dataIndex: 'manufacturedDate',
       key: 'manufacturedDate',
+      render: (text) => <>{moment(text).format('YYYY-MM-DD')}</>,
     },
     {
       title: 'TAG ID',
@@ -133,28 +153,29 @@ const Index = () => {
       key: 'price',
     },
     {
-      key: 'key',
-      render: () => {
-        return <Button>Засах</Button>;
-      },
+      render: (_, record) => <Button onClick={() => Edit(record)}>Засах</Button>,
     },
   ];
-
-  function Edit() {
+  const [edit, setEdit] = useState(false);
+  function Edit(e) {
+    form.setFieldsValue(e);
+    form.setFieldsValue({ manufacturedDate: dayjs(moment(e?.manufacturedDate).format('YYYY/MM/DD'), 'YYYY/MM/DD') });
     setIsModalOpen(true);
+    setEdit(true);
   }
   const dispatch = useAppDispatch();
-  // const { teachers } = useAppSelector((state) => state.adminTeacherReducer);
+  const { teachers } = useAppSelector((state) => state.adminTeacherReducer);
   const { laboratories } = useAppSelector((state) => state.adminLaboratoryReducer);
   const { devices } = useAppSelector((state) => state.adminDeviceReducer);
+  const { users } = useAppSelector((state) => state.adminUserReducer);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [type, setType] = useState(1);
   const [form] = Form.useForm();
-  const [form1] = Form.useForm();
-  const [form2] = Form.useForm();
 
   const showModal = () => {
+    form.resetFields();
     setIsModalOpen(true);
+    setEdit(false);
   };
 
   const handleCancel = () => {
@@ -162,8 +183,14 @@ const Index = () => {
   };
   useEffect(() => {
     dispatch(
-      getAdminTeacher({
+      getAdminUser({
         pageSize: 10,
+        pageNum: 0,
+      }),
+    );
+    dispatch(
+      getAdminTeacher({
+        pageSize: 0,
         pageNum: 0,
       }),
     );
@@ -175,7 +202,7 @@ const Index = () => {
     );
     dispatch(
       getAdminLaboratory({
-        pageSize: 10,
+        pageSize: 0,
         pageNum: 0,
       }),
     );
@@ -187,10 +214,32 @@ const Index = () => {
       content: 'Хэрэглэгч амжилттай бүртгэгдлээ',
     });
   };
-  function onFinishLaboratory(values) {
+  function onFinishDevice(values) {
     dispatch(postAdminDevice(values)).then((e) => {
       if (e?.payload?.success) {
         success();
+        setIsModalOpen(false);
+
+        dispatch(
+          getAdminDevice({
+            pageSize: 10,
+            pageNum: 0,
+          }),
+        );
+      }
+    });
+  }
+  function onFinishUser(values) {
+    dispatch(postAdminUser({ role: 'customer', ...values })).then((e) => {
+      if (e?.payload?.success) {
+        success();
+        setIsModalOpen(false);
+        dispatch(
+          getAdminUser({
+            pageSize: 10,
+            pageNum: 0,
+          }),
+        );
       }
     });
   }
@@ -198,20 +247,97 @@ const Index = () => {
     dispatch(postAdminTeacher(values)).then((e) => {
       if (e?.payload?.success) {
         success();
+        setIsModalOpen(false);
+        dispatch(
+          getAdminTeacher({
+            pageSize: 0,
+            pageNum: 0,
+          }),
+        );
       }
     });
   }
-  function onFinishDevice(values) {
+  function onFinishLaboratory(values) {
     dispatch(postAdminLaboratory(values)).then((e) => {
       if (e?.payload?.success) {
         success();
+        setIsModalOpen(false);
+        dispatch(
+          getAdminLaboratory({
+            pageSize: 0,
+            pageNum: 0,
+          }),
+        );
       }
     });
+  }
+
+  function onDelete(e) {
+    if (e?.type === 'user') {
+      dispatch(deleteAdminUser({ _id: form.getFieldValue('_id') })).then((d) => {
+        if (d?.payload?.success) {
+          success();
+          setIsModalOpen(false);
+          dispatch(
+            getAdminUser({
+              pageSize: 10,
+              pageNum: 0,
+            }),
+          );
+        }
+      });
+    }
+    if (e?.type === 'device') {
+      dispatch(deleteAdminDevice({ _id: form.getFieldValue('_id') })).then((d) => {
+        if (d?.payload?.success) {
+          success();
+          setIsModalOpen(false);
+          dispatch(
+            getAdminDevice({
+              pageSize: 10,
+              pageNum: 0,
+            }),
+          );
+        }
+      });
+    }
+    if (e?.type === 'laborant') {
+      dispatch(deleteAdminTeacher({ _id: form.getFieldValue('_id') })).then((d) => {
+        if (d?.payload?.success) {
+          success();
+          setIsModalOpen(false);
+          dispatch(
+            getAdminTeacher({
+              pageSize: 0,
+              pageNum: 0,
+            }),
+          );
+        }
+      });
+    }
+    if (e?.type === 'lab') {
+      dispatch(deleteAdminLaboratory({ _id: form.getFieldValue('_id') })).then((d) => {
+        if (d?.payload?.success) {
+          success();
+          setIsModalOpen(false);
+          dispatch(
+            getAdminLaboratory({
+              pageSize: 0,
+              pageNum: 0,
+            }),
+          );
+        }
+      });
+    }
   }
   return (
     <div>
       {contextHolder}
       <div className={style.cards}>
+        <div className={style.card} onClick={() => setType(0)}>
+          <Image src="/icons/user-tie.png" alt="" width={50} height={50} style={{ margin: '20px' }} />
+          Лаборатори хариуцсан багшийн бүртгэл
+        </div>
         <div className={style.card} onClick={() => setType(1)}>
           <Image src="/icons/checkList.png" alt="" width={50} height={50} style={{ margin: '20px' }} />
           Лабораторын анги бүртгэл
@@ -229,7 +355,9 @@ const Index = () => {
         Бүртгэл харах
         <Button type="primary" onClick={showModal}>
           <Image src="/icons/add.png" alt="" width={10} height={10} style={{ marginRight: '10px' }} />{' '}
-          {type === 1
+          {type === 0
+            ? 'Хэрэглэгч нэмэх'
+            : type === 1
             ? 'Лабораторийн анги нэмэх'
             : type === 2
             ? 'Лаборатори хариуцсан багш нэмэх'
@@ -237,12 +365,14 @@ const Index = () => {
         </Button>
       </div>
       <Table
-        dataSource={type === 1 ? laboratories : type === 2 ? dataSource : devices}
-        columns={type === 1 ? columns : type === 2 ? columns1 : columns2}
+        dataSource={type === 0 ? users : type === 1 ? laboratories : type === 2 ? teachers : devices}
+        columns={type === 0 ? columns0 : type === 1 ? columns : type === 2 ? columns1 : columns2}
       />
       <Modal
         title={
-          type === 1
+          type === 0
+            ? 'Хэрэглэгч нэмэх'
+            : type === 1
             ? 'Лабораторийн анги нэмэх'
             : type === 2
             ? 'Лаборатори хариуцсан багш нэмэх'
@@ -254,16 +384,80 @@ const Index = () => {
         cancelText="Буцах"
         footer={false}
       >
+        {type === 0 ? (
+          <Form
+            labelCol={{ span: 24 }}
+            wrapperCol={{ span: 24 }}
+            layout="vertical"
+            style={{ maxWidth: 800 }}
+            form={form}
+            onFinish={onFinishUser}
+          >
+            {edit ? <Form.Item label="" name="_id" /> : null}
+            <Form.Item label="Овог" name="last_name">
+              <Input />
+            </Form.Item>
+            <Form.Item label="Нэр" name="first_name">
+              <Input />
+            </Form.Item>
+            <Form.Item label="Утас" name="phone">
+              <Input />
+            </Form.Item>
+            <Form.Item label="Лаботароийн ангийн дугаар" name="address">
+              <Input />
+            </Form.Item>
+            <Form.Item label="e-mail хаяг" name="email">
+              <Input />
+            </Form.Item>
+            <Form.Item label="Нууц үг" name="password">
+              <Input.Password />
+            </Form.Item>
+            <Form.Item>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div>
+                  {edit ? (
+                    <Popconfirm
+                      title="Хэрэглэгч устгах"
+                      description="Устгахдаа итгэлтай байна уу?"
+                      onConfirm={() => onDelete({ type: 'user' })}
+                      okText="Тийм"
+                      cancelText="Үгүй"
+                    >
+                      <Button danger>Устгах</Button>
+                    </Popconfirm>
+                  ) : null}
+                </div>
+                <Button type="primary" htmlType="submit">
+                  Бүртгүүлэх
+                </Button>
+              </div>
+            </Form.Item>
+          </Form>
+        ) : null}
         {type === 1 ? (
           <Form
             labelCol={{ span: 24 }}
             wrapperCol={{ span: 24 }}
             layout="vertical"
             style={{ maxWidth: 800 }}
-            form={form2}
+            form={form}
             onFinish={onFinishLaboratory}
           >
+            {edit ? <Form.Item label="" name="_id" /> : null}
             <Form.Item label="Сургууль" name="school">
+              <Select
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
+                options={[
+                  {
+                    value: 'SICT',
+                    label: 'SICT',
+                  },
+                ]}
+              />
+            </Form.Item>
+            <Form.Item label="Лабораторын нэршил" name="title">
               <Input />
             </Form.Item>
             <Form.Item label="Давхар" name="floor">
@@ -273,7 +467,12 @@ const Index = () => {
               <Input />
             </Form.Item>
             <Form.Item label="Хариуцсан багшийн нэр" name="teacher">
-              <Input />
+              <Select
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
+                options={(teachers || [])?.map((aa) => ({ label: aa?.first_name, value: aa?._id }))}
+              />
             </Form.Item>
 
             <Form.Item label="Зураг оруулах" valuePropName="fileList" name="medias">
@@ -284,9 +483,24 @@ const Index = () => {
               </Upload>
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Бүртгүүлэх
-              </Button>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div>
+                  {edit ? (
+                    <Popconfirm
+                      title="Лабортор устгах"
+                      description="Устгахдаа итгэлтай байна уу?"
+                      onConfirm={() => onDelete({ type: 'lab' })}
+                      okText="Тийм"
+                      cancelText="Үгүй"
+                    >
+                      <Button danger>Устгах</Button>
+                    </Popconfirm>
+                  ) : null}
+                </div>
+                <Button type="primary" htmlType="submit">
+                  Бүртгүүлэх
+                </Button>
+              </div>
             </Form.Item>
           </Form>
         ) : null}
@@ -296,13 +510,20 @@ const Index = () => {
             wrapperCol={{ span: 24 }}
             layout="vertical"
             style={{ maxWidth: 800 }}
-            form={form1}
+            form={form}
             onFinish={onFinishTeacher}
           >
+            {edit ? <Form.Item label="" name="_id" /> : null}
             <Form.Item label="Овог" name="last_name">
               <Input />
             </Form.Item>
             <Form.Item label="Нэр" name="first_name">
+              <Input />
+            </Form.Item>
+            <Form.Item label="Багшийн код" name="code">
+              <Input />
+            </Form.Item>
+            <Form.Item label="Утас" name="phone">
               <Input />
             </Form.Item>
             <Form.Item label="Лаботароийн ангийн дугаар" name="address">
@@ -312,15 +533,30 @@ const Index = () => {
               <Input />
             </Form.Item>
             <Form.Item label="Нууц үг" name="password">
-              <Input />
+              <Input.Password />
             </Form.Item>
             <Form.Item label="Зураг оруулах">
               <Input />
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Бүртгүүлэх
-              </Button>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div>
+                  {edit ? (
+                    <Popconfirm
+                      title="Лаборант устгах"
+                      description="Устгахдаа итгэлтай байна уу?"
+                      onConfirm={() => onDelete({ type: 'laborant' })}
+                      okText="Тийм"
+                      cancelText="Үгүй"
+                    >
+                      <Button danger>Устгах</Button>
+                    </Popconfirm>
+                  ) : null}
+                </div>
+                <Button type="primary" htmlType="submit">
+                  Бүртгүүлэх
+                </Button>
+              </div>
             </Form.Item>
           </Form>
         ) : null}
@@ -333,23 +569,23 @@ const Index = () => {
             form={form}
             onFinish={onFinishDevice}
           >
-            <Form.Item label="Төхөөрөмжийн тайлбар" name="title">
-              <Input />
-            </Form.Item>
+            {edit ? <Form.Item label="" name="_id" /> : null}
             <Form.Item label="Төхөөрөмж нэр" name="title">
               <Input />
             </Form.Item>
             <Form.Item label="Лабортор" name="laboratory">
-              <Input />
-            </Form.Item>
-            <Form.Item label="Үйлдвэрлэгч" name="manufacturer">
-              <Input />
+              <Select
+                showSearch
+                optionFilterProp="children"
+                filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
+                options={(laboratories || [])?.map((aa) => ({ label: aa?.title, value: aa?._id }))}
+              />
             </Form.Item>
             <Form.Item label="Модель" name="model">
               <Input />
             </Form.Item>
             <Form.Item label="Үйлдвэрлэсэн он" name="manufacturedDate">
-              <Input />
+              <DatePicker />
             </Form.Item>
             <Form.Item label="TAG ID" name="tagID">
               <Input />
@@ -358,12 +594,31 @@ const Index = () => {
               <Input />
             </Form.Item>
             <Form.Item label="Үнэ" name="price">
-              <Input />
+              <InputNumber
+                style={{ width: '100%' }}
+                formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                parser={(value) => value?.replace(/\\s?|(,*)/g, '')}
+              />
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Бүртгүүлэх
-              </Button>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div>
+                  {edit ? (
+                    <Popconfirm
+                      title="Төхөөрөмж устгах"
+                      description="Устгахдаа итгэлтай байна уу?"
+                      onConfirm={() => onDelete({ type: 'device' })}
+                      okText="Тийм"
+                      cancelText="Үгүй"
+                    >
+                      <Button danger>Устгах</Button>
+                    </Popconfirm>
+                  ) : null}
+                </div>
+                <Button type="primary" htmlType="submit">
+                  {edit ? 'Засах' : 'Бүртгүүлэх'}
+                </Button>
+              </div>
             </Form.Item>
           </Form>
         ) : null}

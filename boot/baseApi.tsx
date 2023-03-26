@@ -7,7 +7,7 @@ import Cookies from 'js-cookie';
 export const token = Cookies.get('token') || null;
 
 const axiosConfig = {
-  baseURL: 'http://192.168.0.150:3001/api',
+  baseURL: 'http://202.70.34.22/api',
   timeout: 30000,
 };
 export const api = axios.create(axiosConfig);
