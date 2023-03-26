@@ -1,54 +1,55 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Calendar, DateRange } from 'react-date-range';
 import { Button, Card, Carousel, Checkbox, Col, Image, Modal, Radio, Row } from 'antd';
 import { CheckboxValueType } from 'antd/es/checkbox/Group';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import moment from 'moment';
+import { useRouter } from 'next/router';
 
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
+
+import { useAppDispatch, useAppSelector } from '@/modules/hooks';
+import {
+  postUserDevoceOrders,
+  postUserLaboratoryDeviceOrder,
+  postUserLaboratorySingle,
+} from '@/modules/user/laboratory/laboratory.services';
 
 import style from './index.module.css';
 
 dayjs.extend(customParseFormat);
 const hours = [
-  '09:00-10:00',
-  '08:00-09:00',
-  '10:00-11:00',
-  '11:00-12:00',
-  '12:00-13:00',
-  '13:00-14:00',
-  '14:00-15:00',
-  '15:00-16:00',
-  '16:00-17:00',
-  '17:00-18:00',
-  '18:00-19:00',
-  '19:00-20:00',
+  { hour: '09:00-10:00', value: 0 },
+  { hour: '08:00-09:00', value: 1 },
+  { hour: '10:00-11:00', value: 2 },
+  { hour: '11:00-12:00', value: 3 },
+  { hour: '12:00-13:00', value: 4 },
+  { hour: '13:00-14:00', value: 5 },
+  { hour: '14:00-15:00', value: 6 },
+  { hour: '15:00-16:00', value: 7 },
+  { hour: '16:00-17:00', value: 8 },
+  { hour: '17:00-18:00', value: 9 },
+  { hour: '18:00-19:00', value: 10 },
+  { hour: '19:00-20:00', value: 11 },
 ];
 
-const disDays = [new Date(), new Date('2023-03-18')];
-
 const Index = () => {
+  const dateaa = new Date();
+  const options = { timeZone: 'Asia/Ulaanbaatar' };
+  const isoString = dateaa.toLocaleString('sv-SE', options);
+  const [checkedList, setCheckedList] = useState<CheckboxValueType[]>([]);
+  const { laboratory, submitLoading, orders } = useAppSelector((state) => state.userLaboratoryReducer);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [device, setDevice] = useState({ _id: '', title: '' });
   const [value, setValue] = useState(null);
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  const [date, setDate] = useState(undefined);
+  const [date, setDate] = useState(new Date());
   const [state, setState] = useState([
     {
       startDate: new Date(),
-      endDate: undefined,
+      endDate: new Date(),
       key: 'selection',
       color: undefined,
       autoFocus: undefined,
@@ -56,49 +57,123 @@ const Index = () => {
       showDateDisplay: undefined,
     },
   ]);
+  const showModal = (dev) => {
+    setCheckedList([]);
+    setDevice({ _id: dev?._id, title: dev?.title });
+    dispatch(postUserDevoceOrders({ device_id: dev?._id, date: isoString, type: 'hour' }));
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+    if (value === 'day') {
+      dispatch(
+        postUserLaboratoryDeviceOrder({
+          device_id: device?._id,
+          data: convertDateRangeToArray(state[0]),
+          description: 'a',
+          type: 'day',
+        }),
+      ).then((d) => {
+        if (d?.payload?.success) {
+          dispatch(postUserDevoceOrders({ device_id: device?._id, date: isoString, type: 'day' }));
+        }
+      });
+    } else {
+      dispatch(
+        postUserLaboratoryDeviceOrder({
+          device_id: device?._id,
+          data: checkedList.map((num) => ({
+            date: date.toLocaleString('sv-SE', options),
+            hour: num,
+          })),
+          description: 'a',
+          type: 'hour',
+        }),
+      ).then((d) => {
+        if (d?.payload?.success) {
+          dispatch(postUserDevoceOrders({ device_id: device?._id, date: isoString, type: 'hour' }));
+        }
+      });
+    }
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+  const [uniqueDates, setUniqueDates] = useState<Date[]>([]);
+  useEffect(() => {
+    const disDays = [...new Set(orders.map((item) => new Date(moment(item).format('YYYY-MM-DD'))))];
+    setUniqueDates(disDays);
+  }, [orders]);
+
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    if (router?.query?.labId !== undefined) {
+      dispatch(postUserLaboratorySingle({ _id: router?.query?.labId }));
+    }
+  }, [router?.query?.labId]);
 
   const onChange = (checkedValues: CheckboxValueType[]) => {
-    // eslint-disable-next-line no-console
-    console.log('checked = ', checkedValues);
+    setCheckedList(checkedValues);
   };
+  function orderFunc(e) {
+    setValue(e);
+    if (e === 'hour') {
+      dispatch(postUserDevoceOrders({ device_id: device?._id, date: isoString, type: 'hour' }));
+    } else {
+      dispatch(postUserDevoceOrders({ device_id: device?._id, date: isoString, type: 'day' }));
+    }
+  }
+  function onDate(item) {
+    setCheckedList([]);
+    setDate(item);
+    dispatch(
+      postUserDevoceOrders({ device_id: device?._id, date: item.toLocaleString('sv-SE', options), type: 'hour' }),
+    );
+  }
+  function convertDateRangeToArray(dateRange: { startDate: Date; endDate: Date }) {
+    const { startDate } = dateRange;
+    const { endDate } = dateRange;
+    const datesArray: { date: string }[] = [];
+    for (let datex = startDate; datex <= endDate; datex.setDate(datex.getDate() + 1)) {
+      datesArray.push({ date: new Date(datex).toLocaleString('sv-SE', options) });
+    }
 
-  return (
+    return datesArray;
+  }
+  return submitLoading ? (
+    <></>
+  ) : (
     <div style={{ padding: '20px' }}>
       <Row>
         <Col className={style.cols} span={8}>
           <div className={style.col}>
             <div className={style.text}>Сургууль</div>
-            <div className={style.card}>МХТС</div>
+            <div className={style.card}>{laboratory?.school}</div>
           </div>
         </Col>
         <Col className={style.cols} span={8}>
           <div className={style.col}>
             <div className={style.text}>Лаботароийн ангийн дугаар</div>
-            <div className={style.card}>МХТС</div>
+            <div className={style.card}>{laboratory?.room}</div>
           </div>
         </Col>
         <Col className={style.cols} span={8}>
           <div className={style.col}>
             <div className={style.text}>Давхар</div>
-            <div className={style.card}>МХТС</div>
+            <div className={style.card}>{laboratory?.floor}</div>
           </div>
         </Col>
         <Col className={style.cols} span={8}>
           <div className={style.col}>
-            <div className={style.text}>Төхөөрөмжийн нэр</div>
-            <div className={style.card}>МХТС</div>
-          </div>
-        </Col>
-        <Col className={style.cols} span={8}>
-          <div className={style.col}>
-            <div className={style.text}>Төхөөрөмжийн код</div>
-            <div className={style.card}>МХТС</div>
+            <div className={style.text}>Лабораторын нэршил</div>
+            <div className={style.card}>{laboratory?.title}</div>
           </div>
         </Col>
         <Col className={style.cols} span={8}>
           <div className={style.col}>
             <div className={style.text}>Хариуцсан багшийн нэр</div>
-            <div className={style.card}>МХТС</div>
+            <div className={style.card}>{laboratory?.teacher}</div>
           </div>
         </Col>
       </Row>
@@ -120,37 +195,39 @@ const Index = () => {
       </Row>
       <h1 style={{ marginLeft: '70px' }}>Төхөөрөмжүүд</h1>
       <Row wrap style={{ margin: '0px 10px 50px 10px' }}>
-        <Col span={12} className={style.cols}>
-          <Card hoverable title="IMAC 27inch" extra={<Button onClick={showModal}>Захиалах</Button>}>
-            <div className={style.device}>
-              <Image
-                alt=""
-                width={200}
-                src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-              />
-              <ul style={{ margin: '0px' }}>
-                <li className={style.list}>
-                  <span style={{ fontWeight: '700' }}>- Төхөөрөмж:</span> Mac
-                </li>
-                <li className={style.list}>
-                  <span style={{ fontWeight: '700' }}>- Үйлдвэрлэгч:</span> Apple
-                </li>
-                <li className={style.list}>
-                  <span style={{ fontWeight: '700' }}>- Модел:</span> IMac24
-                </li>
-                <li className={style.list}>
-                  <span style={{ fontWeight: '700' }}>- Үйлдвэрлэсэн он:</span> 2022
-                </li>
-                <li className={style.list}>
-                  <span style={{ fontWeight: '700' }}>- Зориулалт:</span> Cургалт, судалгаанд
-                </li>
-              </ul>
-            </div>
-          </Card>
-        </Col>
+        {laboratory?.devices?.map((dev, key) => {
+          return (
+            <Col span={12} className={style.cols} key={key}>
+              <Card hoverable title={dev?.title} extra={<Button onClick={() => showModal(dev)}>Захиалах</Button>}>
+                <div className={style.device}>
+                  <Image
+                    alt=""
+                    width={200}
+                    src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                  />
+                  <ul style={{ margin: '0px' }}>
+                    <li className={style.list}>
+                      <span style={{ fontWeight: '700' }}>- Төхөөрөмж:</span> {dev?.title}
+                    </li>
+                    <li className={style.list}>
+                      <span style={{ fontWeight: '700' }}>- Модел:</span> {dev?.model}
+                    </li>
+                    <li className={style.list}>
+                      <span style={{ fontWeight: '700' }}>- Үйлдвэрлэсэн он:</span>{' '}
+                      {moment(dev?.manufacturedDate).format('YYYY-MM-DD')}
+                    </li>
+                    <li className={style.list}>
+                      <span style={{ fontWeight: '700' }}>- Төхөөрөмжийн үнэлгээ:</span> {dev?.price} MNT
+                    </li>
+                  </ul>
+                </div>
+              </Card>
+            </Col>
+          );
+        })}
       </Row>
       <Modal
-        title="IMac24"
+        title={device?.title}
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -159,7 +236,7 @@ const Index = () => {
         cancelText="Цуцлах"
       >
         <div>
-          <Radio.Group defaultValue="hour" size="large" onChange={(e) => setValue(e?.target?.value)}>
+          <Radio.Group defaultValue="hour" size="large" onChange={(e) => orderFunc(e?.target?.value)}>
             <Radio.Button value="hour">Цагаар</Radio.Button>
             <Radio.Button value="day">Өдрөөр</Radio.Button>
           </Radio.Group>
@@ -167,11 +244,12 @@ const Index = () => {
             {value === 'day' ? (
               <Col span={24}>
                 <DateRange
+                  minDate={new Date()}
                   editableDateInputs={true}
                   onChange={(item: any) => setState([item?.selection])}
                   moveRangeOnFirstSelection={false}
                   ranges={state}
-                  disabledDates={disDays}
+                  disabledDates={uniqueDates}
                 />
               </Col>
             ) : (
@@ -183,25 +261,25 @@ const Index = () => {
                       paddingBottom: '10px',
                     }}
                   >
-                    <Calendar onChange={(item: any) => setDate(item)} date={date} />
+                    <Calendar onChange={(item: any) => onDate(item)} date={date} minDate={new Date()} />
                   </div>
                 </Col>
+                <Col span={3} />
                 <Col span={12}>
-                  <Checkbox.Group onChange={onChange}>
+                  <Checkbox.Group onChange={onChange} value={checkedList}>
                     <Row wrap>
                       {hours.map((e, key) => {
                         return (
                           <Col key={key} span={8} className={style.orderCard}>
-                            <div>{e}</div>
-                            <Checkbox value={e}>Захиалах</Checkbox>
+                            <div>{e?.hour}</div>
+                            <Checkbox value={e?.value} disabled={orders.includes(e?.value)}>
+                              {orders.includes(e?.value) ? 'Захиалсан' : 'Захиалах'}
+                            </Checkbox>
                           </Col>
                         );
                       })}
                     </Row>
                   </Checkbox.Group>
-                </Col>
-                <Col span={3} style={{ border: '1px solid #eeeeee', paddingBottom: '10px' }}>
-                  Сонголтууд:
                 </Col>
               </>
             )}

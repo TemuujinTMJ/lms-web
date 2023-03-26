@@ -68,7 +68,7 @@ const Home = () => {
       if (e?.payload?.success) {
         Cookies.set('token', e?.payload?.token);
         loggedIn();
-        router.push(role === 'customer' ? 'user' : role === 'teacher' ? 'lab' : 'admin');
+        router.push(role === 'customer' ? 'user' : role === 'teacher' ? 'laborant' : 'admin');
       } else failedLogin();
     });
   }

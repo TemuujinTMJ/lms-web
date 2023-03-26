@@ -1,30 +1,30 @@
-import React from 'react';
-import { Input, Select, Table } from 'antd';
+import React, { useEffect } from 'react';
+import { Table } from 'antd';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import style from './index.module.css';
+import { useAppDispatch, useAppSelector } from '@/modules/hooks';
+import { getUserLaboratory } from '@/modules/user/laboratory/laboratory.services';
 
 const User = () => {
   const router = useRouter();
-
-  const dataSource = [
-    {
-      key: '1',
-      school: <Link href={`${router.asPath}/mac`}>Must-Sicst</Link>,
-      floor: 3,
-      class: '310',
-      device: 'Mac',
-      deviceCode: '123',
-      laborant: 'Г.Мөнхбат',
-    },
-  ];
+  const { laboratories, loading } = useAppSelector((state) => state.userLaboratoryReducer);
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(
+      getUserLaboratory({
+        pageSize: 20,
+        pageNum: 0,
+      }),
+    );
+  }, []);
 
   const columns = [
     {
       title: 'Сургууль',
       dataIndex: 'school',
       key: 'school',
+      render: (_, record) => <Link href={`${router.asPath}/${record?._id}`}>{record?.school}</Link>,
     },
     {
       title: 'Давхар',
@@ -33,36 +33,24 @@ const User = () => {
     },
     {
       title: 'Лабораторын ангийн дугаар',
-      dataIndex: 'class',
-      key: 'class',
+      dataIndex: 'room',
+      key: 'room',
     },
     {
-      title: 'төхөөрөмжийн төрөл',
-      dataIndex: 'device',
-      key: 'device',
-    },
-    {
-      title: 'төхөөрөмжийн код',
-      dataIndex: 'deviceCode',
-      key: 'deviceCode',
+      title: 'Лабораторын нэршил',
+      dataIndex: 'title',
+      key: 'title',
     },
     {
       title: 'лаборант хариуцагч',
-      dataIndex: 'laborant',
-      key: 'laborant',
+      dataIndex: 'teacher',
+      key: 'teacher',
     },
   ];
 
   return (
-    <div>
-      <div className={style.header}>
-        <div>
-          Анги:
-          <Select placeholder="сонгоно уу" style={{ marginLeft: '10px', width: '200px' }} />
-        </div>
-        <Input placeholder="Хайх" style={{ width: '200px' }} />
-      </div>
-      <Table dataSource={dataSource} columns={columns} />
+    <div style={{ padding: '20px' }}>
+      <Table dataSource={laboratories} columns={columns} loading={loading} />
     </div>
   );
 };

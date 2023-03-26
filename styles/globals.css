@@ -90,4 +90,7 @@ body {
    .react-calendar, .react-calendar *, .react-calendar *:before, .react-calendar *:after {
     color: white;
    }
-   
+   .ant-popover-inner {
+    max-height: 300px;
+    overflow: scroll;
+   }
