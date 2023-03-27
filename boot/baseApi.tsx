@@ -3,7 +3,6 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 // import { config } from './config';
-
 export const token = Cookies.get('token') || null;
 
 const axiosConfig = {
@@ -36,7 +35,8 @@ api.interceptors.response.use(
 
 api.interceptors.request.use(
   async (conf) => {
-    conf.headers.setAuthorization(`${token}`);
+    const tokenGet = Cookies.get('token') || null;
+    conf.headers.setAuthorization(`${tokenGet}`);
     conf.headers.setContentType('application/json');
     return conf;
   },

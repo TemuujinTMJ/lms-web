@@ -8,6 +8,8 @@ import '../styles/globals.css';
 import Layout from '@/components/Layout';
 import { store } from '@/modules/store';
 
+import Auth from './auth';
+
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };
@@ -23,7 +25,9 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   if (Component.getLayout) {
     return Component.getLayout(
       <Provider store={store}>
-        <Component {...pageProps} />
+        <Auth>
+          <Component {...pageProps} />
+        </Auth>
       </Provider>,
     );
   }
@@ -31,9 +35,11 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <Provider store={store}>
       {getLayout(
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>,
+        <Auth>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </Auth>,
       )}
     </Provider>
   );
