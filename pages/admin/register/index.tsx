@@ -32,6 +32,7 @@ import { deleteAdminUser, getAdminUser, postAdminUser } from '@/modules/admin/us
 import { useAppDispatch, useAppSelector } from '@/modules/hooks';
 
 import style from './register.module.css';
+import { config } from '@/boot/config';
 
 const Index = () => {
   const columns = [
@@ -71,7 +72,7 @@ const Index = () => {
                     width={100}
                     height={100}
                     style={{ padding: '10px' }}
-                    src={`http://202.70.34.22/api${med.path}`}
+                    src={`${config.HOST}${med.path}`}
                   />
                 );
               })}
@@ -416,7 +417,7 @@ const Index = () => {
   const uploadProps = {
     maxCount: 5,
     name: 'image',
-    action: 'http://202.70.34.22/api/upload/image',
+    action: `${config.HOST}/upload/image`,
     data: {
       type: 'image',
     },
@@ -431,7 +432,7 @@ const Index = () => {
   const uploadPropsSinlge = {
     maxCount: 1,
     name: 'image',
-    action: 'http://202.70.34.22/api/upload/image',
+    action: `${config.HOST}/upload/image`,
     data: {
       type: 'pano',
     },

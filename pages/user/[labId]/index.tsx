@@ -20,6 +20,7 @@ import {
 } from '@/modules/user/laboratory/laboratory.services';
 
 import style from './index.module.css';
+import { config } from '@/boot/config';
 
 const { TextArea } = Input;
 const Index = () => {
@@ -212,7 +213,7 @@ const Index = () => {
           <Carousel autoplay style={{ width: '400px' }}>
             {laboratory?.medias.map((e, key) => {
               return e?.type === 'image' ? (
-                <Image key={key} alt="" width={400} src={`http://202.70.34.22/api${e.path}`} />
+                <Image key={key} alt="" width={400} src={`${config.HOST}${e?.path}`} />
               ) : null;
             })}
           </Carousel>
@@ -225,13 +226,7 @@ const Index = () => {
             <Col span={12} className={style.cols} key={key}>
               <Card hoverable title={dev?.title} extra={<Button onClick={() => showModal(dev)}>Захиалах</Button>}>
                 <div className={style.device}>
-                  <Image
-                    key={key}
-                    alt=""
-                    width={200}
-                    height={200}
-                    src={`http://202.70.34.22/api${dev?.medias[0]?.path}`}
-                  />
+                  <Image key={key} alt="" width={200} height={200} src={`${config.HOST}${dev?.medias[0]?.path}`} />
                   <ul style={{ margin: '0px', width: '300px' }}>
                     <li className={style.list}>
                       <span style={{ fontWeight: '700' }}>- Төхөөрөмж:</span> {dev?.title}

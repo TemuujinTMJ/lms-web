@@ -2,11 +2,11 @@ import { message } from 'antd';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-// import { config } from './config';
-export const token = Cookies.get('token') || null;
+import { config } from './config';
 
+export const token = Cookies.get('token') || null;
 const axiosConfig = {
-  baseURL: 'http://202.70.34.22/api',
+  baseURL: config.HOST,
   timeout: 30000,
 };
 export const api = axios.create(axiosConfig);
