@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Calendar, DateRange } from 'react-date-range';
+import ReactPannellum from 'react-pannellum';
 import { Button, Card, Carousel, Checkbox, Col, Image, Input, Modal, Popover, Radio, Row } from 'antd';
 import { CheckboxValueType } from 'antd/es/checkbox/Group';
 import dayjs from 'dayjs';
@@ -12,6 +13,7 @@ import { useRouter } from 'next/router';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 
+import { config } from '@/boot/config';
 import { useAppDispatch, useAppSelector } from '@/modules/hooks';
 import {
   postUserDevoceOrders,
@@ -20,7 +22,6 @@ import {
 } from '@/modules/user/laboratory/laboratory.services';
 
 import style from './index.module.css';
-import { config } from '@/boot/config';
 
 const { TextArea } = Input;
 const Index = () => {
@@ -217,6 +218,13 @@ const Index = () => {
               ) : null;
             })}
           </Carousel>
+        </Col>
+        <Col span={12}>
+          {laboratory?.medias.map((e, key) => {
+            return e?.type === 'pano' ? (
+              <ReactPannellum id="1" sceneId="firstScene" imageSource={`${config.HOST}${e?.path}`} />
+            ) : null;
+          })}
         </Col>
       </Row>
       <h1 style={{ marginLeft: '70px' }}>Төхөөрөмжүүд</h1>

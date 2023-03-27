@@ -6,8 +6,8 @@ import { useRouter } from 'next/router';
 import { useAppDispatch, useAppSelector } from '@/modules/hooks';
 import { getUserLaboratory } from '@/modules/user/laboratory/laboratory.services';
 
+import image from '../../public/pictures/pano.jpg';
 import style from './index.module.css';
-import { config } from '@/boot/config';
 
 const User = () => {
   const router = useRouter();
@@ -21,7 +21,6 @@ const User = () => {
       }),
     );
   }, []);
-  console.log(config.HOST, 'hhe')
 
   const columns = [
     {

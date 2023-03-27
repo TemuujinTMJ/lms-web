@@ -21,6 +21,7 @@ import dayjs from 'dayjs';
 import Cookies from 'js-cookie';
 import moment from 'moment';
 
+import { config } from '@/boot/config';
 import { deleteAdminDevice, getAdminDevice, postAdminDevice } from '@/modules/admin/device/device.services';
 import {
   deleteAdminLaboratory,
@@ -32,7 +33,6 @@ import { deleteAdminUser, getAdminUser, postAdminUser } from '@/modules/admin/us
 import { useAppDispatch, useAppSelector } from '@/modules/hooks';
 
 import style from './register.module.css';
-import { config } from '@/boot/config';
 
 const Index = () => {
   const columns = [
@@ -388,11 +388,11 @@ const Index = () => {
     if (!isJpgOrPng) {
       message.error('You can only upload JPG/PNG file!');
     }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
+    const isLt10M = file.size / 10240 / 10240 < 20;
+    if (!isLt10M) {
       message.error('Image must smaller than 2MB!');
     }
-    return isJpgOrPng && isLt2M;
+    return isJpgOrPng && isLt10M;
   }
   let imageId = [];
   function handleUploadSingle(info: any) {
@@ -408,11 +408,11 @@ const Index = () => {
     if (!isJpgOrPng) {
       message.error('You can only upload JPG/PNG file!');
     }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
+    const isLt10M = file.size / 10240 / 10240 < 20;
+    if (!isLt10M) {
       message.error('Image must smaller than 2MB!');
     }
-    return isJpgOrPng && isLt2M;
+    return isJpgOrPng && isLt10M;
   }
   const uploadProps = {
     maxCount: 5,
@@ -448,20 +448,20 @@ const Index = () => {
       {contextHolder}
       <div className={style.cards}>
         <div className={style.card} onClick={() => setType(0)}>
-          <Image src="/icons/user-tie.png" alt="" width={50} height={50} style={{ margin: '20px' }} />
-          Хэрэглэгчийн бүртгэл
+          <Image src="/icons/user-tie.png" alt="" width={50} height={50} preview={false} />
+          <div style={{ width: '160px' }}>Хэрэглэгчийн бүртгэл</div>
         </div>
         <div className={style.card} onClick={() => setType(1)}>
-          <Image src="/icons/checkList.png" alt="" width={50} height={50} style={{ margin: '20px' }} />
-          Лабораторын анги бүртгэл
+          <Image src="/icons/checkList.png" alt="" width={50} height={50} preview={false} />
+          <div style={{ width: '160px' }}>Лабораторын анги бүртгэл</div>
         </div>
         <div className={style.card} onClick={() => setType(2)}>
-          <Image src="/icons/user-tie.png" alt="" width={50} height={50} style={{ margin: '20px' }} />
-          Лаборатори хариуцсан багшийн бүртгэл
+          <Image src="/icons/user-tie.png" alt="" width={50} height={50} preview={false} />
+          <div style={{ width: '160px' }}>Лаборатори хариуцсан багшийн бүртгэл</div>
         </div>
         <div className={style.card} onClick={() => setType(3)}>
-          <Image src="/icons/note.png" alt="" width={50} height={50} style={{ margin: '20px' }} />
-          Лабораторийн төхөөрөмж бүртгэл
+          <Image src="/icons/note.png" alt="" width={50} height={50} preview={false} />
+          <div style={{ width: '160px' }}>Лабораторийн төхөөрөмж бүртгэл</div>
         </div>
       </div>
       <div className={style.subTitle}>
