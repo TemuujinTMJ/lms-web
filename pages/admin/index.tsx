@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import { Doughnut, Line } from 'react-chartjs-2';
 import {
@@ -17,48 +17,83 @@ import Image from 'next/image';
 
 import 'react-calendar/dist/Calendar.css';
 
+import { getAdminHome, getAdminHomeChart, getAdminHomePie } from '@/modules/admin/dashboard/dashboard.services';
+import { useAppDispatch, useAppSelector } from '@/modules/hooks';
+
 import style from './index.module.css';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, Title);
 
-export const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: 'bottom' as const,
-    },
-  },
-};
-
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-
-export const dataLine = {
-  labels,
-  datasets: [
-    {
-      label: 'Dataset 1',
-      data: [100, 90, 50, 13, 50, 123, 100],
-      borderColor: 'rgb(255, 99, 132)',
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
-    },
-  ],
-};
-
-export const data = {
-  labels: ['Ашиглагдаж байгаа', 'Эвдрэл', 'ирсэн захиалга', 'Ашиглагдаагүй'],
-  datasets: [
-    {
-      label: 'тоо ширхэг',
-      data: [12, 19, 3, 5],
-      backgroundColor: ['#605CFF', '#2FE6A7', '#FF69B4', '#FFF'],
-    },
-  ],
-};
-
 const Admin = () => {
   const [date, setDate] = useState(new Date());
+  const dispatch = useAppDispatch();
+  const { users, requests, devices, loading, activeDevices, requestedDevices, mostDevices } = useAppSelector(
+    (state) => state.adminHomeReducer,
+  );
+  useEffect(() => {
+    dispatch(getAdminHome({}));
+    dispatch(getAdminHomeChart({}));
+    dispatch(getAdminHomePie({ date: new Date().toISOString() }));
+  }, []);
+  const today = new Date();
+  const startDate = new Date(today.getFullYear(), 0, 1);
+  const endDate = new Date(today.getFullYear() + 1, 0, 1);
+  const numMonths =
+    (endDate.getFullYear() - startDate.getFullYear()) * 12 + (endDate.getMonth() - startDate.getMonth()) + 1;
 
-  return (
+  const result = Array(numMonths).fill(0);
+  mostDevices.forEach((d) => {
+    const month = new Date(d.month);
+    const index = (month.getFullYear() - startDate.getFullYear()) * 12 + (month.getMonth() - startDate.getMonth());
+    result[index] += d.value;
+  });
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'bottom' as const,
+      },
+    },
+  };
+  const labels = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+  const dataLine = {
+    labels,
+    datasets: [
+      {
+        label: 'Dataset 1',
+        data: result,
+        borderColor: 'rgb(255, 99, 132)',
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      },
+    ],
+  };
+
+  const data = {
+    labels: ['Ашиглагдаж байгаа', 'Захиалгатай', 'Ашиглагдаагүй'],
+    datasets: [
+      {
+        label: 'тоо ширхэг',
+        data: [activeDevices, requestedDevices, devices - activeDevices],
+        backgroundColor: ['#605CFF', '#FF69B4', '#FFF'],
+      },
+    ],
+  };
+  return loading ? (
+    <></>
+  ) : (
     <>
       <div className={style.row}>
         <div style={{ width: '660px' }}>
@@ -67,17 +102,17 @@ const Admin = () => {
         <div className={style.card}>
           <div className={style.item}>
             <Image src="/icons/people.png" width={70} height={70} alt="" />
-            <div className={style.count}>3,230+</div>
+            <div className={style.count}>{users}</div>
             <div style={{ fontSize: '18px' }}>Хэрэглэгч</div>
           </div>
           <div className={style.item}>
             <Image src="/icons/graphic.png" width={70} height={70} alt="" />
-            <div className={style.count}>3,230+</div>
-            <div style={{ fontSize: '18px' }}>Нийт авсан үйлчилгээ</div>
+            <div className={style.count}>{requests}</div>
+            <div style={{ fontSize: '18px' }}>Нийт захиалга</div>
           </div>
           <div className={style.item}>
             <Image src="/icons/device.png" width={70} height={70} alt="" />
-            <div className={style.count}>3,230+</div>
+            <div className={style.count}>{devices}</div>
             <div style={{ fontSize: '18px' }}>Төхөөрөмжийн тоо</div>
           </div>
         </div>

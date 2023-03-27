@@ -65,10 +65,6 @@ const SideMenu = () => {
             <Image src="/icons/menu2.png" alt="" width={25} height={25} style={{ margin: '20px 0px 0px 20px' }} />
             Захиалга харах
           </Link>
-          <Link href="/laborant/labUsage" className={style.menuItem}>
-            <Image src="/icons/menu3.png" alt="" width={25} height={25} style={{ margin: '20px 0px 0px 20px' }} />
-            Лаборатор ашиглалт
-          </Link>
           <Link href="/laborant/report" className={style.menuItem}>
             <Image src="/icons/menu4.png" alt="" width={25} height={25} style={{ margin: '20px 0px 0px 20px' }} />
             Тайлан

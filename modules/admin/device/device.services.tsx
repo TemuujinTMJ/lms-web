@@ -1,10 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import queryString from 'query-string';
 
 import { api } from '@/boot/baseApi';
 
 export const getAdminDevice = createAsyncThunk('admin/device/get', async (data: object) => {
-  const url = `/admin/device/get?${queryString.stringify(data)}`;
+  const url = `/admin/device/get`;
   return api.post(url, data).then((response) => response.data);
 });
 

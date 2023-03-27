@@ -4,7 +4,7 @@ import queryString from 'query-string';
 import { api } from '@/boot/baseApi';
 
 export const getUserLaboratory = createAsyncThunk('customer/laboratory/get', async (data: object) => {
-  const url = `/customer/laboratory/get?${queryString.stringify(data)}`;
+  const url = `/customer/laboratory/get`;
   return api.post(url, data).then((response) => response.data);
 });
 

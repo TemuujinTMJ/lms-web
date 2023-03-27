@@ -1,64 +1,81 @@
-import React from 'react';
-import { Input, Select, Table, Tag } from 'antd';
+import React, { useEffect } from 'react';
+import { Input, Popover, Select, Table, Tag } from 'antd';
+
+import { getAdminLabUsage } from '@/modules/admin/dashboard/dashboard.services';
+import { useAppDispatch, useAppSelector } from '@/modules/hooks';
 
 import style from './lab.module.css';
 
-const dataSource = [
-  {
-    key: '1',
-    name: 'Mike',
-    age: 32,
-    address: '10 Downing Street',
-    tag: <Tag color="error">used</Tag>,
-  },
-  {
-    key: '2',
-    name: 'John',
-    age: 42,
-    address: '10 Downing Street',
-    tag: <Tag color="success">using</Tag>,
-  },
-];
-
 const columns = [
   {
-    title: 'Төхөөрөмж',
+    title: 'Сургууль',
+    dataIndex: 'school',
+    key: 'school',
+  },
+  {
+    title: 'Давхар',
+    dataIndex: 'floor',
+    key: 'floor',
+  },
+  {
+    title: 'Лабораторын ангийн дугаар',
+    dataIndex: 'room',
+    key: 'room',
+  },
+  {
+    title: 'Хариуцсан багшийн нэр',
+    dataIndex: 'teacher',
+    key: 'teacher',
+    render: (_, record) => (
+      <Popover
+        content={
+          <>
+            <div className={style.flex}>
+              <div>Овог:</div>
+              <div>{record?.teacher?.last_name}</div>
+            </div>
+            <div className={style.flex}>
+              <div>Нэр:</div>
+              <div>{record?.teacher?.first_name}</div>
+            </div>
+            <div className={style.flex}>
+              <div>Утас:</div>
+              <div>{record?.teacher?.phone}</div>
+            </div>
+            <div className={style.flex}>
+              <div>email:</div>
+              <div>{record?.teacher?.email}</div>
+            </div>
+          </>
+        }
+        title="Багшийн мэдээлэл"
+        trigger="click"
+      >
+        <a>{record?.teacher?.first_name}</a>
+      </Popover>
+    ),
+  },
+  {
+    title: 'Лабораторийн ангийн зураг',
     dataIndex: 'name',
     key: 'name',
   },
   {
-    title: 'Модел',
-    dataIndex: 'age',
-    key: 'age',
-  },
-  {
-    title: 'Үйлдвэрлэгч',
-    dataIndex: 'address',
-    key: 'address',
-  },
-  {
-    title: 'Ашиглах цаг/хугацаа',
-    dataIndex: 'address',
-    key: 'address',
-  },
-  {
-    title: 'Хариуцаж буй багш',
-    dataIndex: 'address',
-    key: 'address',
-  },
-  {
-    title: 'анги',
-    dataIndex: 'address',
-    key: 'address',
-  },
-  {
     title: 'Төлөв',
-    dataIndex: 'tag',
-    key: 'tag',
+    dataIndex: 'inUse',
+    key: 'inUse',
+    render: (_, record) => (
+      <Tag color={record?.inUse ? 'success' : 'warning'}>{record?.inUse ? 'Ашиглагдаж байна' : 'Ашиглагдаагүй'}</Tag>
+    ),
   },
 ];
 
-const index = () => {
+const Index = () => {
+  const { loadingLab, labUsages } = useAppSelector((state) => state.adminHomeReducer);
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(getAdminLabUsage({ pageNum: 0, pageSize: 0 }));
+  }, []);
   return (
     <div>
       <div className={style.header}>
@@ -68,9 +85,9 @@ const index = () => {
         </div>
         <Input placeholder="Хайх" style={{ width: '200px' }} />
       </div>
-      <Table dataSource={dataSource} columns={columns} />
+      <Table dataSource={labUsages} columns={columns} loading={loadingLab} />
     </div>
   );
 };
 
-export default index;
+export default Index;

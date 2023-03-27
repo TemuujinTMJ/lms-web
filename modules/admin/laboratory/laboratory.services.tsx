@@ -1,10 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import queryString from 'query-string';
 
 import { api } from '@/boot/baseApi';
 
 export const getAdminLaboratory = createAsyncThunk('admin/laboratory/get', async (data: object) => {
-  const url = `/admin/laboratory/get?${queryString.stringify(data)}`;
+  const url = `/admin/laboratory/get`;
   return api.post(url, data).then((response) => response.data);
 });
 

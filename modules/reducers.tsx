@@ -1,7 +1,9 @@
 import { combineReducers } from 'redux';
 
+import adminHomeReducer from './admin/dashboard/dashboard.slicer';
 import adminDeviceReducer from './admin/device/device.slicer';
 import adminLaboratoryReducer from './admin/laboratory/laboratory.slicer';
+import adminRequestReducer from './admin/order/order.slicer';
 import adminTeacherReducer from './admin/teacher/teacher.slicer';
 import adminUserReducer from './admin/user/user.slicer';
 import authReducer from './auth/auth.slicer';
@@ -18,6 +20,8 @@ const rootReducer = combineReducers({
   userLaboratoryReducer,
   userRequestReducer,
   teacherRequestReducer,
+  adminRequestReducer,
+  adminHomeReducer,
 });
 
 export default rootReducer;

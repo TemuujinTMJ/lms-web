@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Button, Popconfirm, Popover, Table } from 'antd';
+import { Button, Popconfirm, Popover, Table, Tag } from 'antd';
 import moment from 'moment';
 
 import { useAppDispatch, useAppSelector } from '@/modules/hooks';
@@ -101,7 +101,7 @@ const Index = () => {
       render: (_, record) => <>{record?.device?.title}</>,
     },
     {
-      title: 'лаборант хариуцагч',
+      title: 'Лабортор хариуцагч',
       dataIndex: 'laborant',
       key: 'laborant',
       render: (_, record) => <>{record?.laboratory?.teacher}</>,
@@ -110,7 +110,7 @@ const Index = () => {
       title: 'Төлөв',
       dataIndex: 'status',
       key: 'status',
-      render: (_, record) => (
+      render: (text, record) => (
         <div
           style={{
             display: 'flex',
@@ -119,7 +119,11 @@ const Index = () => {
             width: '150px',
           }}
         >
-          <div>{record?.status}</div>
+          <Tag color={text === 'approved' ? 'success' : text === 'declined' ? 'error' : 'warning'}>
+            {text === 'approved' ? 'Баталгаажсан' : null}
+            {text === 'declined' ? 'Цуцлагдсан' : null}
+            {text === 'pending' ? 'Хүлээгдэж байна' : null}
+          </Tag>
           <Popconfirm
             title="Захиалгй устгах"
             description="Хүлээгдэж буй захиалгыг устгахдаа итгэлтэй байна уу??"

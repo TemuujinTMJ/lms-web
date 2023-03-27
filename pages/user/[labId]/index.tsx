@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useState } from 'react';
+import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { Calendar, DateRange } from 'react-date-range';
-import { Button, Card, Carousel, Checkbox, Col, Image, Modal, Radio, Row } from 'antd';
+import { Button, Card, Carousel, Checkbox, Col, Image, Input, Modal, Radio, Row } from 'antd';
 import { CheckboxValueType } from 'antd/es/checkbox/Group';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -20,23 +20,23 @@ import {
 
 import style from './index.module.css';
 
-dayjs.extend(customParseFormat);
-const hours = [
-  { hour: '09:00-10:00', value: 0 },
-  { hour: '08:00-09:00', value: 1 },
-  { hour: '10:00-11:00', value: 2 },
-  { hour: '11:00-12:00', value: 3 },
-  { hour: '12:00-13:00', value: 4 },
-  { hour: '13:00-14:00', value: 5 },
-  { hour: '14:00-15:00', value: 6 },
-  { hour: '15:00-16:00', value: 7 },
-  { hour: '16:00-17:00', value: 8 },
-  { hour: '17:00-18:00', value: 9 },
-  { hour: '18:00-19:00', value: 10 },
-  { hour: '19:00-20:00', value: 11 },
-];
-
+const { TextArea } = Input;
 const Index = () => {
+  dayjs.extend(customParseFormat);
+  const hours = [
+    { hour: '09:00-10:00', value: 0 },
+    { hour: '08:00-09:00', value: 1 },
+    { hour: '10:00-11:00', value: 2 },
+    { hour: '11:00-12:00', value: 3 },
+    { hour: '12:00-13:00', value: 4 },
+    { hour: '13:00-14:00', value: 5 },
+    { hour: '14:00-15:00', value: 6 },
+    { hour: '15:00-16:00', value: 7 },
+    { hour: '16:00-17:00', value: 8 },
+    { hour: '17:00-18:00', value: 9 },
+    { hour: '18:00-19:00', value: 10 },
+    { hour: '19:00-20:00', value: 11 },
+  ];
   const dateaa = new Date();
   const options = { timeZone: 'Asia/Ulaanbaatar' };
   const isoString = dateaa.toLocaleString('sv-SE', options);
@@ -242,16 +242,25 @@ const Index = () => {
           </Radio.Group>
           <Row style={{ marginTop: '20px', marginBottom: '50px' }}>
             {value === 'day' ? (
-              <Col span={24}>
-                <DateRange
-                  minDate={new Date()}
-                  editableDateInputs={true}
-                  onChange={(item: any) => setState([item?.selection])}
-                  moveRangeOnFirstSelection={false}
-                  ranges={state}
-                  disabledDates={uniqueDates}
-                />
-              </Col>
+              <>
+                <Col span={9}>
+                  <DateRange
+                    minDate={new Date()}
+                    editableDateInputs={true}
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    onChange={(item: any) => setState([item?.selection])}
+                    moveRangeOnFirstSelection={false}
+                    ranges={state}
+                    disabledDates={uniqueDates}
+                  />
+                </Col>
+                <Col span={15}>
+                  <div style={{ fontSize: '16px', fontWeight: 'bold', border: '1px solid #eeeeee' }}>
+                    Ашиглах зорилго:
+                  </div>
+                  <TextArea style={{ border: 'none', height: '300px', overflow: 'scroll' }} />
+                </Col>
+              </>
             ) : (
               <>
                 <Col span={9}>
@@ -261,11 +270,10 @@ const Index = () => {
                       paddingBottom: '10px',
                     }}
                   >
-                    <Calendar onChange={(item: any) => onDate(item)} date={date} minDate={new Date()} />
+                    <Calendar onChange={(item) => onDate(item)} date={date} minDate={new Date()} />
                   </div>
                 </Col>
-                <Col span={3} />
-                <Col span={12}>
+                <Col span={8}>
                   <Checkbox.Group onChange={onChange} value={checkedList}>
                     <Row wrap>
                       {hours.map((e, key) => {
@@ -280,6 +288,12 @@ const Index = () => {
                       })}
                     </Row>
                   </Checkbox.Group>
+                </Col>
+                <Col span={7}>
+                  <div style={{ fontSize: '16px', fontWeight: 'bold', border: '1px solid #eeeeee' }}>
+                    Ашиглах зорилго:
+                  </div>
+                  <TextArea style={{ border: 'none', height: '300px', overflow: 'scroll' }} />
                 </Col>
               </>
             )}

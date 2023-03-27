@@ -38,6 +38,7 @@ const Index = () => {
       title: 'Хариуцсан багшийн нэр',
       dataIndex: 'teacher',
       key: 'teacher',
+      render: (_, record) => <div>{record?.teacher?.first_name}</div>,
     },
     {
       title: 'Лабораторийн ангийн зураг',
@@ -336,7 +337,7 @@ const Index = () => {
       <div className={style.cards}>
         <div className={style.card} onClick={() => setType(0)}>
           <Image src="/icons/user-tie.png" alt="" width={50} height={50} style={{ margin: '20px' }} />
-          Лаборатори хариуцсан багшийн бүртгэл
+          Хэрэглэгчийн бүртгэл
         </div>
         <div className={style.card} onClick={() => setType(1)}>
           <Image src="/icons/checkList.png" alt="" width={50} height={50} style={{ margin: '20px' }} />

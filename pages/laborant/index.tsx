@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import Calendar from 'react-calendar';
+import React from 'react';
 import { Doughnut, Line } from 'react-chartjs-2';
+import { Table } from 'antd';
 import {
   ArcElement,
   CategoryScale,
@@ -12,15 +12,48 @@ import {
   Title,
   Tooltip,
 } from 'chart.js';
-import moment from 'moment';
-import Image from 'next/image';
 
-import 'react-calendar/dist/Calendar.css';
-
-// import Layout from '@/components/Layout';
 import style from './index.module.css';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, Title);
+const dataSource = [
+  {
+    key: '1',
+    name: 'Э.Тэнгис',
+    code: 'В201900002',
+    device: 'IMAC',
+    date: '2023-02-08 15:30-16:30 ',
+    description: 'Бие даалт хийх',
+  },
+];
+
+const columns = [
+  {
+    title: 'Нэр',
+    dataIndex: 'name',
+    key: 'name',
+  },
+  {
+    title: 'Оюутны код',
+    dataIndex: 'code',
+    key: 'code',
+  },
+  {
+    title: 'Хэрэглэх төхөөрөмж',
+    dataIndex: 'device',
+    key: 'device',
+  },
+  {
+    title: 'Тайлбар',
+    dataIndex: 'description',
+    key: 'description',
+  },
+  {
+    title: 'Дуусах хугацаа',
+    dataIndex: 'date',
+    key: 'date',
+  },
+];
 
 export const options = {
   responsive: true,
@@ -28,7 +61,33 @@ export const options = {
     legend: {
       position: 'bottom' as const,
     },
+    title: {
+      display: true,
+      text: '2022-2023 оны лаборатори ашигласан байдал',
+    },
   },
+};
+export const options2 = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: 'right' as const,
+    },
+    title: {
+      display: true,
+      text: 'Хэрэглэгдэж буй төхөөрөмжийн мэдээлэл',
+    },
+  },
+};
+export const data = {
+  labels: ['Ашиглагдаж байгаа төхөөрөмж', 'Сул байгаа төхөөрөмж'],
+  datasets: [
+    {
+      label: 'тоо ширхэг',
+      data: [12, 5],
+      backgroundColor: ['#605CFF', '#FFF'],
+    },
+  ],
 };
 
 const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
@@ -45,82 +104,20 @@ export const dataLine = {
   ],
 };
 
-export const data = {
-  labels: ['Ашиглагдаж байгаа', 'Эвдрэл', 'ирсэн захиалга', 'Ашиглагдаагүй'],
-  datasets: [
-    {
-      label: 'тоо ширхэг',
-      data: [12, 19, 3, 5],
-      backgroundColor: ['#605CFF', '#2FE6A7', '#FF69B4', '#FFF'],
-    },
-  ],
-};
-
-const Laborant = () => {
-  const [date, setDate] = useState(new Date());
-
+const Index = () => {
   return (
     <>
       <div className={style.row}>
-        <div style={{ width: '660px' }}>
+        <div style={{ width: '400px' }}>
+          <Doughnut options={options2} data={data} />
+        </div>
+        <div style={{ width: '700px' }}>
           <Line options={options} data={dataLine} />
         </div>
-        <div className={style.card}>
-          <div className={style.item}>
-            <Image src="/icons/people.png" width={70} height={70} alt="" />
-            <div className={style.count}>3,230+</div>
-            <div style={{ fontSize: '18px' }}>Хэрэглэгч</div>
-          </div>
-          <div className={style.item}>
-            <Image src="/icons/graphic.png" width={70} height={70} alt="" />
-            <div className={style.count}>3,230+</div>
-            <div style={{ fontSize: '18px' }}>Нийт авсан үйлчилгээ</div>
-          </div>
-          <div className={style.item}>
-            <Image src="/icons/device.png" width={70} height={70} alt="" />
-            <div className={style.count}>3,230+</div>
-            <div style={{ fontSize: '18px' }}>Төхөөрөмжийн тоо</div>
-          </div>
-        </div>
       </div>
-      <div className={style.row}>
-        <div style={{ width: '300px' }}>
-          <Doughnut options={options} data={data} />
-        </div>
-        <div className={style.calendar}>
-          <div className={style.schedule}>
-            <div className={style.day}>
-              <div className={style.month}>
-                <div>{moment().format('MM')} сарын</div>
-                <div>{moment().format('YYYY')}</div>
-              </div>
-              {moment().format('DD')}
-            </div>
-            <div className={style.list}>test</div>
-            <div className={style.list}>title</div>
-            <div className={style.title}>SCHEDULE</div>
-            <div className={style.list}>
-              <div>08:00 - 22:00</div>
-              <div>Ажлын цаг</div>
-            </div>
-            <div className={style.list}>
-              <div>02:00 - 03:00</div>
-              <div>Цайны цаг</div>
-            </div>
-            <div className={style.list}>
-              <div>12:00 - 12:30</div>
-              <div>Хурлын цаг</div>
-            </div>
-            <div className={style.list}>
-              <div>22:00 - 08:00</div>
-              <div>Амралтын цаг</div>
-            </div>
-          </div>
-          <Calendar onChange={setDate} value={date} />
-        </div>
-      </div>
+      <Table dataSource={dataSource} columns={columns} />
     </>
   );
 };
 
-export default Laborant;
+export default Index;
