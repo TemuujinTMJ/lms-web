@@ -1,7 +1,8 @@
+/* eslint-disable max-lines */
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Calendar, DateRange } from 'react-date-range';
-import { Button, Card, Carousel, Checkbox, Col, Image, Input, Modal, Radio, Row } from 'antd';
+import { Button, Card, Carousel, Checkbox, Col, Image, Input, Modal, Popover, Radio, Row } from 'antd';
 import { CheckboxValueType } from 'antd/es/checkbox/Group';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -38,6 +39,7 @@ const Index = () => {
     { hour: '19:00-20:00', value: 11 },
   ];
   const dateaa = new Date();
+  const [desc, setDesc] = useState('');
   const options = { timeZone: 'Asia/Ulaanbaatar' };
   const isoString = dateaa.toLocaleString('sv-SE', options);
   const [checkedList, setCheckedList] = useState<CheckboxValueType[]>([]);
@@ -58,6 +60,7 @@ const Index = () => {
     },
   ]);
   const showModal = (dev) => {
+    setDesc('');
     setCheckedList([]);
     setDevice({ _id: dev?._id, title: dev?.title });
     dispatch(postUserDevoceOrders({ device_id: dev?._id, date: isoString, type: 'hour' }));
@@ -70,7 +73,7 @@ const Index = () => {
         postUserLaboratoryDeviceOrder({
           device_id: device?._id,
           data: convertDateRangeToArray(state[0]),
-          description: 'a',
+          description: desc,
           type: 'day',
         }),
       ).then((d) => {
@@ -86,7 +89,7 @@ const Index = () => {
             date: date.toLocaleString('sv-SE', options),
             hour: num,
           })),
-          description: 'a',
+          description: desc,
           type: 'hour',
         }),
       ).then((d) => {
@@ -173,23 +176,45 @@ const Index = () => {
         <Col className={style.cols} span={8}>
           <div className={style.col}>
             <div className={style.text}>Хариуцсан багшийн нэр</div>
-            <div className={style.card}>{laboratory?.teacher}</div>
+            <div className={style.card}>
+              <Popover
+                content={
+                  <>
+                    <div className={style.flex}>
+                      <div>Овог:</div>
+                      <div>{laboratory?.teacher?.last_name}</div>
+                    </div>
+                    <div className={style.flex}>
+                      <div>Нэр:</div>
+                      <div>{laboratory?.teacher?.first_name}</div>
+                    </div>
+                    <div className={style.flex}>
+                      <div>Утас:</div>
+                      <div>{laboratory?.teacher?.phone}</div>
+                    </div>
+                    <div className={style.flex}>
+                      <div>email:</div>
+                      <div>{laboratory?.teacher?.email}</div>
+                    </div>
+                  </>
+                }
+                title="Багшийн мэдээлэл"
+                trigger="click"
+              >
+                <a>{laboratory?.teacher?.first_name}</a>
+              </Popover>
+            </div>
           </div>
         </Col>
       </Row>
       <Row>
         <Col span={12} className={style.cols}>
           <Carousel autoplay style={{ width: '400px' }}>
-            <Image
-              alt=""
-              width={400}
-              src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-            />
-            <Image
-              alt=""
-              width={400}
-              src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-            />
+            {laboratory?.medias.map((e, key) => {
+              return e?.type === 'image' ? (
+                <Image key={key} alt="" width={400} src={`http://202.70.34.22/api${e.path}`} />
+              ) : null;
+            })}
           </Carousel>
         </Col>
       </Row>
@@ -201,11 +226,13 @@ const Index = () => {
               <Card hoverable title={dev?.title} extra={<Button onClick={() => showModal(dev)}>Захиалах</Button>}>
                 <div className={style.device}>
                   <Image
+                    key={key}
                     alt=""
                     width={200}
-                    src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
+                    height={200}
+                    src={`http://202.70.34.22/api${dev?.medias[0]?.path}`}
                   />
-                  <ul style={{ margin: '0px' }}>
+                  <ul style={{ margin: '0px', width: '300px' }}>
                     <li className={style.list}>
                       <span style={{ fontWeight: '700' }}>- Төхөөрөмж:</span> {dev?.title}
                     </li>
@@ -258,7 +285,11 @@ const Index = () => {
                   <div style={{ fontSize: '16px', fontWeight: 'bold', border: '1px solid #eeeeee' }}>
                     Ашиглах зорилго:
                   </div>
-                  <TextArea style={{ border: 'none', height: '300px', overflow: 'scroll' }} />
+                  <TextArea
+                    style={{ border: 'none', height: '300px', overflow: 'scroll' }}
+                    value={desc}
+                    onChange={(e) => setDesc(e?.target?.value)}
+                  />
                 </Col>
               </>
             ) : (
@@ -293,7 +324,11 @@ const Index = () => {
                   <div style={{ fontSize: '16px', fontWeight: 'bold', border: '1px solid #eeeeee' }}>
                     Ашиглах зорилго:
                   </div>
-                  <TextArea style={{ border: 'none', height: '300px', overflow: 'scroll' }} />
+                  <TextArea
+                    style={{ border: 'none', height: '300px', overflow: 'scroll' }}
+                    value={desc}
+                    onChange={(e) => setDesc(e?.target?.value)}
+                  />
                 </Col>
               </>
             )}

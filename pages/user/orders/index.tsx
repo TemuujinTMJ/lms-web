@@ -5,6 +5,8 @@ import moment from 'moment';
 import { useAppDispatch, useAppSelector } from '@/modules/hooks';
 import { deleteUserRequest, getUserRequest } from '@/modules/user/order/order.services';
 
+import style from './orderlist.module.css';
+
 const Index = () => {
   const hours = [
     { hour: '09:00-10:00', value: 0 },
@@ -104,7 +106,34 @@ const Index = () => {
       title: 'Лабортор хариуцагч',
       dataIndex: 'laborant',
       key: 'laborant',
-      render: (_, record) => <>{record?.laboratory?.teacher}</>,
+      render: (_, record) => (
+        <Popover
+          content={
+            <>
+              <div className={style.flex}>
+                <div>Овог:</div>
+                <div>{record?.laboratory?.teacher?.last_name}</div>
+              </div>
+              <div className={style.flex}>
+                <div>Нэр:</div>
+                <div>{record?.laboratory?.teacher?.first_name}</div>
+              </div>
+              <div className={style.flex}>
+                <div>Утас:</div>
+                <div>{record?.laboratory?.teacher?.phone}</div>
+              </div>
+              <div className={style.flex}>
+                <div>email:</div>
+                <div>{record?.laboratory?.teacher?.email}</div>
+              </div>
+            </>
+          }
+          title="Багшийн мэдээлэл"
+          trigger="click"
+        >
+          <a>{record?.laboratory?.teacher?.first_name}</a>
+        </Popover>
+      ),
     },
     {
       title: 'Төлөв',

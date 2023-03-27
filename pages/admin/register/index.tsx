@@ -1,9 +1,25 @@
 /* eslint-disable max-lines */
+// @ts-ignore-file
+// @ts-nocheck
 import React, { useEffect, useState } from 'react';
-import { Button, DatePicker, Form, Input, InputNumber, message, Modal, Popconfirm, Select, Table, Upload } from 'antd';
+import {
+  Button,
+  DatePicker,
+  Form,
+  Image,
+  Input,
+  InputNumber,
+  message,
+  Modal,
+  Popconfirm,
+  Popover,
+  Select,
+  Table,
+  Upload,
+} from 'antd';
 import dayjs from 'dayjs';
+import Cookies from 'js-cookie';
 import moment from 'moment';
-import Image from 'next/image';
 
 import { deleteAdminDevice, getAdminDevice, postAdminDevice } from '@/modules/admin/device/device.services';
 import {
@@ -42,8 +58,31 @@ const Index = () => {
     },
     {
       title: 'Лабораторийн ангийн зураг',
-      dataIndex: 'name',
       key: 'name',
+      render: (_, record) => (
+        <Popover
+          content={
+            <div style={{ display: 'flex' }}>
+              {record?.medias.map((med, key) => {
+                return (
+                  <Image
+                    key={key}
+                    alt=""
+                    width={100}
+                    height={100}
+                    style={{ padding: '10px' }}
+                    src={`http://202.70.34.22/api${med.path}`}
+                  />
+                );
+              })}
+            </div>
+          }
+          title="Лабораторын зургууд"
+          trigger="click"
+        >
+          <Button>Зургууд харах</Button>
+        </Popover>
+      ),
     },
     {
       render: (_, record) => <Button onClick={() => Edit(record)}>Засах</Button>,
@@ -216,7 +255,7 @@ const Index = () => {
     });
   };
   function onFinishDevice(values) {
-    dispatch(postAdminDevice(values)).then((e) => {
+    dispatch(postAdminDevice({ ...values, medias: imageId })).then((e) => {
       if (e?.payload?.success) {
         success();
         setIsModalOpen(false);
@@ -259,7 +298,10 @@ const Index = () => {
     });
   }
   function onFinishLaboratory(values) {
-    dispatch(postAdminLaboratory(values)).then((e) => {
+    if (imageId.length > 0) {
+      imageIds.push(imageId[0]);
+    }
+    dispatch(postAdminLaboratory({ ...values, medias: imageIds })).then((e) => {
       if (e?.payload?.success) {
         success();
         setIsModalOpen(false);
@@ -331,6 +373,75 @@ const Index = () => {
       });
     }
   }
+  let imageIds = [];
+  function handleUpload(info: any) {
+    if (info.file.status === 'done') {
+      message.success(`${info.file.name} file uploaded successfully`);
+    } else if (info.file.status === 'error') {
+      message.error(`${info.file.name} file upload failed.`);
+    }
+    imageIds = info?.fileList.map((image) => image?.response?.image._id);
+  }
+  function beforeUpload(file: any) {
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    if (!isJpgOrPng) {
+      message.error('You can only upload JPG/PNG file!');
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error('Image must smaller than 2MB!');
+    }
+    return isJpgOrPng && isLt2M;
+  }
+  let imageId = [];
+  function handleUploadSingle(info: any) {
+    if (info.file.status === 'done') {
+      message.success(`${info.file.name} file uploaded successfully`);
+    } else if (info.file.status === 'error') {
+      message.error(`${info.file.name} file upload failed.`);
+    }
+    imageId = info?.fileList.map((image) => image?.response?.image._id);
+  }
+  function beforeUploadSingle(file: any) {
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    if (!isJpgOrPng) {
+      message.error('You can only upload JPG/PNG file!');
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error('Image must smaller than 2MB!');
+    }
+    return isJpgOrPng && isLt2M;
+  }
+  const uploadProps = {
+    maxCount: 5,
+    name: 'image',
+    action: 'http://202.70.34.22/api/upload/image',
+    data: {
+      type: 'image',
+    },
+    listType: 'picture-card',
+    headers: {
+      authorization: Cookies.get('token'),
+    },
+    beforeUpload,
+    onChange: handleUpload,
+  };
+
+  const uploadPropsSinlge = {
+    maxCount: 1,
+    name: 'image',
+    action: 'http://202.70.34.22/api/upload/image',
+    data: {
+      type: 'pano',
+    },
+    listType: 'picture-card',
+    headers: {
+      authorization: Cookies.get('token'),
+    },
+    beforeUpload: beforeUploadSingle,
+    onChange: handleUploadSingle,
+  };
   return (
     <div>
       {contextHolder}
@@ -452,8 +563,8 @@ const Index = () => {
                 filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
                 options={[
                   {
-                    value: 'SICT',
-                    label: 'SICT',
+                    value: 'SCIT',
+                    label: 'SCIT',
                   },
                 ]}
               />
@@ -476,12 +587,15 @@ const Index = () => {
               />
             </Form.Item>
 
-            <Form.Item label="Зураг оруулах" valuePropName="fileList" name="medias">
-              <Upload action="/upload.do" listType="picture-card">
-                <div>
-                  <div style={{ marginTop: 8 }}>Зураг оруулах</div>
-                </div>
-              </Upload>
+            <Form.Item label="Зураг оруулах (Дээд хэмжээ 5)" valuePropName="fileList" name="medias">
+              <>
+                <Upload {...uploadProps}>Зураг оруулах</Upload>
+              </>
+            </Form.Item>
+            <Form.Item label="360 Зураг оруулах (Дээд хэмжээ 1)" valuePropName="fileList" name="medias">
+              <>
+                <Upload {...uploadPropsSinlge}>Зураг оруулах</Upload>
+              </>
             </Form.Item>
             <Form.Item>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -535,9 +649,6 @@ const Index = () => {
             </Form.Item>
             <Form.Item label="Нууц үг" name="password">
               <Input.Password />
-            </Form.Item>
-            <Form.Item label="Зураг оруулах">
-              <Input />
             </Form.Item>
             <Form.Item>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -600,6 +711,11 @@ const Index = () => {
                 formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 parser={(value) => value?.replace(/\\s?|(,*)/g, '')}
               />
+            </Form.Item>
+            <Form.Item label="Зураг оруулах (Дээд хэмжээ 1)" valuePropName="fileList" name="medias">
+              <>
+                <Upload {...uploadPropsSinlge}>Зураг оруулах</Upload>
+              </>
             </Form.Item>
             <Form.Item>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>

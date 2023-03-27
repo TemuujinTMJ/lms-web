@@ -18,7 +18,7 @@ interface iInitialState {
 const initialState: iInitialState = {
   loading: true,
   laboratories: [],
-  submitLoading: false,
+  submitLoading: true,
   orderLoading: false,
   orders: [],
   laboratory: {},

@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
-import { Table } from 'antd';
+import { Popover, Table } from 'antd';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { useAppDispatch, useAppSelector } from '@/modules/hooks';
 import { getUserLaboratory } from '@/modules/user/laboratory/laboratory.services';
+
+import style from './index.module.css';
 
 const User = () => {
   const router = useRouter();
@@ -45,6 +47,34 @@ const User = () => {
       title: 'лаборант хариуцагч',
       dataIndex: 'teacher',
       key: 'teacher',
+      render: (_, record) => (
+        <Popover
+          content={
+            <>
+              <div className={style.flex}>
+                <div>Овог:</div>
+                <div>{record?.teacher?.last_name}</div>
+              </div>
+              <div className={style.flex}>
+                <div>Нэр:</div>
+                <div>{record?.teacher?.first_name}</div>
+              </div>
+              <div className={style.flex}>
+                <div>Утас:</div>
+                <div>{record?.teacher?.phone}</div>
+              </div>
+              <div className={style.flex}>
+                <div>email:</div>
+                <div>{record?.teacher?.email}</div>
+              </div>
+            </>
+          }
+          title="Багшийн мэдээлэл"
+          trigger="click"
+        >
+          <a>{record?.teacher?.first_name}</a>
+        </Popover>
+      ),
     },
   ];
 

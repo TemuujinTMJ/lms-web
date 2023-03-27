@@ -17,7 +17,7 @@ interface iInitialState {
   activeDevices: number;
 }
 const initialState: iInitialState = {
-  loading: false,
+  loading: true,
   loadingLab: false,
   loadingPie: false,
   loadingchart: false,

@@ -56,11 +56,6 @@ const columns = [
     ),
   },
   {
-    title: 'Лабораторийн ангийн зураг',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
     title: 'Төлөв',
     dataIndex: 'inUse',
     key: 'inUse',
