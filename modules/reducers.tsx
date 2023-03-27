@@ -7,6 +7,7 @@ import adminRequestReducer from './admin/order/order.slicer';
 import adminTeacherReducer from './admin/teacher/teacher.slicer';
 import adminUserReducer from './admin/user/user.slicer';
 import authReducer from './auth/auth.slicer';
+import teacherHomeReducer from './lab/dashboard/dashboard.slicer';
 import teacherRequestReducer from './lab/order/order.slicer';
 import meReducer from './me/me.slicer';
 import userLaboratoryReducer from './user/laboratory/laboratory.slicer';
@@ -24,6 +25,7 @@ const rootReducer = combineReducers({
   adminRequestReducer,
   adminHomeReducer,
   meReducer,
+  teacherHomeReducer,
 });
 
 export default rootReducer;
