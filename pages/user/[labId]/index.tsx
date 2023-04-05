@@ -23,6 +23,10 @@ import {
 
 import style from './index.module.css';
 
+const isValidDate = (dateObject) => {
+  return dateObject && new Date(dateObject).toString() !== 'Invalid Date' ? dateObject : null;
+};
+
 const { TextArea } = Input;
 const Index = () => {
   dayjs.extend(customParseFormat);
@@ -40,10 +44,9 @@ const Index = () => {
     { hour: '18:00-19:00', value: 10 },
     { hour: '19:00-20:00', value: 11 },
   ];
-  const dateaa = new Date();
+  const dateaa = moment();
   const [desc, setDesc] = useState('');
-  const options = { timeZone: 'Asia/Ulaanbaatar' };
-  const isoString = dateaa.toLocaleString('sv-SE', options);
+  const isoString = moment(dateaa).startOf('day').toISOString();
   const [checkedList, setCheckedList] = useState<CheckboxValueType[]>([]);
   const { laboratory, submitLoading, orders } = useAppSelector((state) => state.userLaboratoryReducer);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -69,43 +72,47 @@ const Index = () => {
     setIsModalOpen(true);
   };
   const handleOk = () => {
-    setIsModalOpen(false);
-    if (value === 'day') {
-      dispatch(
-        postUserLaboratoryDeviceOrder({
-          device_id: device?._id,
-          data: convertDateRangeToArray(state[0]),
-          description: desc,
-          type: 'day',
-        }),
-      ).then((d) => {
-        if (d?.payload?.success) {
-          message.success('Хүсэлт амжилттай хадгалагдлаа');
-          dispatch(postUserDevoceOrders({ device_id: device?._id, date: isoString, type: 'day' }));
-        }
-      });
+    if (isValidDate(state[0].startDate) && isValidDate(state[0].endDate)) {
+      if (value === 'day') {
+        dispatch(
+          postUserLaboratoryDeviceOrder({
+            device_id: device?._id,
+            data: convertDateRangeToArray(state[0]),
+            description: desc,
+            type: 'day',
+          }),
+        ).then((d) => {
+          if (d?.payload?.success) {
+            message.success('Хүсэлт амжилттай хадгалагдлаа');
+            setIsModalOpen(false);
+            dispatch(postUserDevoceOrders({ device_id: device?._id, date: isoString, type: 'day' }));
+          }
+        });
+      } else {
+        dispatch(
+          postUserLaboratoryDeviceOrder({
+            device_id: device?._id,
+            data: checkedList.map((num) => ({
+              date: moment(date).startOf('day').toISOString(),
+              hour: num,
+            })),
+            description: desc,
+            type: 'hour',
+          }),
+        ).then((d) => {
+          if (d?.payload?.success) {
+            message.success('Хүсэлт амжилттай хадгалагдлаа');
+            setIsModalOpen(false);
+            dispatch(postUserDevoceOrders({ device_id: device?._id, date: isoString, type: 'hour' }));
+          }
+        });
+      }
     } else {
-      dispatch(
-        postUserLaboratoryDeviceOrder({
-          device_id: device?._id,
-          data: checkedList.map((num) => ({
-            date: date.toLocaleString('sv-SE', options),
-            hour: num,
-          })),
-          description: desc,
-          type: 'hour',
-        }),
-      ).then((d) => {
-        if (d?.payload?.success) {
-          message.success('Хүсэлт амжилттай хадгалагдлаа');
-          dispatch(postUserDevoceOrders({ device_id: device?._id, date: isoString, type: 'hour' }));
-        }
-      });
+      message.warning('Эхлэх болон дуусах өдрийг оруулна уу.');
     }
   };
   const handleCancel = () => {
     setIsModalOpen(false);
-    console.log('first');
   };
   const [uniqueDates, setUniqueDates] = useState<Date[]>([]);
   useEffect(() => {
@@ -136,18 +143,22 @@ const Index = () => {
     setCheckedList([]);
     setDate(item);
     dispatch(
-      postUserDevoceOrders({ device_id: device?._id, date: item.toLocaleString('sv-SE', options), type: 'hour' }),
+      postUserDevoceOrders({ device_id: device?._id, date: moment(item).startOf('day').toISOString(), type: 'hour' }),
     );
   }
   function convertDateRangeToArray(dateRange: { startDate: Date; endDate: Date }) {
-    const { startDate } = dateRange;
-    const { endDate } = dateRange;
-    const datesArray: { date: string }[] = [];
-    for (let datex = startDate; datex <= endDate; datex.setDate(datex.getDate() + 1)) {
-      datesArray.push({ date: new Date(datex).toLocaleString('sv-SE', options) });
+    const { startDate, endDate } = dateRange;
+    if (isValidDate(startDate) && isValidDate(endDate)) {
+      if (startDate.getTime() >= endDate.getTime()) {
+        return [{ date: moment(startDate).startOf('day').toISOString() }];
+      }
+      const datesArray: { date: string }[] = [];
+      for (let datex = startDate; datex.getTime() <= endDate.getTime(); datex.setDate(datex.getDate() + 1)) {
+        datesArray.push({ date: moment(datex).startOf('day').toISOString() });
+      }
+      return datesArray;
     }
-
-    return datesArray;
+    return null;
   }
   return submitLoading ? (
     <></>
