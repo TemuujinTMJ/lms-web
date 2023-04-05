@@ -92,5 +92,5 @@ body {
    }
    .ant-popover-inner {
     max-height: 300px;
-    overflow: scroll;
+    overflow: auto;
    }

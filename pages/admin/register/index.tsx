@@ -564,8 +564,8 @@ const Index = () => {
                 filterOption={(input, option) => (option?.label ?? '').toLowerCase().includes(input.toLowerCase())}
                 options={[
                   {
-                    value: 'SCIT',
-                    label: 'SCIT',
+                    value: 'SICT',
+                    label: 'SICT',
                   },
                 ]}
               />
