@@ -18,7 +18,7 @@ const Home = () => {
   const [form] = Form.useForm();
   const { loadingLogin, loadingSignup } = useAppSelector((state) => state.authReducer);
   const dispatch = useAppDispatch();
-  const [messageApi, contextHolder] = message.useMessage();
+  const [messageApi] = message.useMessage();
   const success = () => {
     messageApi.open({
       type: 'success',
@@ -74,7 +74,6 @@ const Home = () => {
   }
   return (
     <>
-      {contextHolder}
       <Head>
         <title>lms</title>
         <meta name="description" content="Sict Lms" />

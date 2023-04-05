@@ -68,7 +68,6 @@ const Index = () => {
     dispatch(postUserDevoceOrders({ device_id: dev?._id, date: isoString, type: 'hour' }));
     setIsModalOpen(true);
   };
-  const [contextHolder] = message.useMessage();
   const handleOk = () => {
     setIsModalOpen(false);
     if (value === 'day') {

@@ -279,7 +279,7 @@ const Index = () => {
       }),
     );
   }, []);
-  const [messageApi, contextHolder] = message.useMessage();
+  const [messageApi] = message.useMessage();
   const success = () => {
     messageApi.open({
       type: 'success',
@@ -476,7 +476,6 @@ const Index = () => {
   };
   return (
     <div>
-      {contextHolder}
       <div className={style.cards}>
         <div className={style.card} onClick={() => setType(0)}>
           <Image src="/icons/user-tie.png" alt="" width={50} height={50} preview={false} />
