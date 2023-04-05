@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Calendar, DateRange } from 'react-date-range';
 import ReactPannellum from 'react-pannellum';
-import { Button, Card, Carousel, Checkbox, Col, Image, Input, Modal, Popover, Radio, Row } from 'antd';
+import { Button, Card, Carousel, Checkbox, Col, Image, Input, Modal, Popover, Radio, Row, message } from 'antd';
 import { CheckboxValueType } from 'antd/es/checkbox/Group';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -80,6 +80,7 @@ const Index = () => {
         }),
       ).then((d) => {
         if (d?.payload?.success) {
+          message.success('Хүсэлт амжилттай хадгалагдлаа');
           dispatch(postUserDevoceOrders({ device_id: device?._id, date: isoString, type: 'day' }));
         }
       });
@@ -96,6 +97,7 @@ const Index = () => {
         }),
       ).then((d) => {
         if (d?.payload?.success) {
+          message.success('Хүсэлт амжилттай хадгалагдлаа');
           dispatch(postUserDevoceOrders({ device_id: device?._id, date: isoString, type: 'hour' }));
         }
       });
