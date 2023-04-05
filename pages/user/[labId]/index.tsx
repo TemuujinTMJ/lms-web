@@ -31,8 +31,8 @@ const { TextArea } = Input;
 const Index = () => {
   dayjs.extend(customParseFormat);
   const hours = [
-    { hour: '09:00-10:00', value: 0 },
-    { hour: '08:00-09:00', value: 1 },
+    { hour: '08:00-09:00', value: 0 },
+    { hour: '09:00-10:00', value: 1 },
     { hour: '10:00-11:00', value: 2 },
     { hour: '11:00-12:00', value: 3 },
     { hour: '12:00-13:00', value: 4 },
@@ -239,7 +239,7 @@ const Index = () => {
       <Row>
         <Col span={12} className={style.cols}>
           <Carousel autoplay style={{ width: '400px' }}>
-            {laboratory?.medias.map((e, key) => {
+            {laboratory?.medias?.map((e, key) => {
               return e?.type === 'image' ? (
                 <Image key={key} alt="" width={400} src={`${config.HOST}${e?.path}`} />
               ) : null;
@@ -247,7 +247,7 @@ const Index = () => {
           </Carousel>
         </Col>
         <Col span={12}>
-          {laboratory?.medias.map((e, key) => {
+          {laboratory?.medias?.map((e, key) => {
             return e?.type === 'pano' ? (
               <ReactPannellum key={key} id="1" sceneId="firstScene" imageSource={`${config.HOST}${e?.path}`} />
             ) : null;
