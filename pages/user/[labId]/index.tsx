@@ -222,7 +222,7 @@ const Index = () => {
         <Col span={12}>
           {laboratory?.medias.map((e, key) => {
             return e?.type === 'pano' ? (
-              <ReactPannellum id="1" sceneId="firstScene" imageSource={`${config.HOST}${e?.path}`} />
+              <ReactPannellum key={key} id="1" sceneId="firstScene" imageSource={`${config.HOST}${e?.path}`} />
             ) : null;
           })}
         </Col>
@@ -289,7 +289,7 @@ const Index = () => {
                     Ашиглах зорилго:
                   </div>
                   <TextArea
-                    style={{ border: 'none', height: '300px', overflow: 'scroll' }}
+                    style={{ border: 'none', height: '300px', overflow: 'auto' }}
                     value={desc}
                     onChange={(e) => setDesc(e?.target?.value)}
                   />
@@ -328,7 +328,7 @@ const Index = () => {
                     Ашиглах зорилго:
                   </div>
                   <TextArea
-                    style={{ border: 'none', height: '300px', overflow: 'scroll' }}
+                    style={{ border: 'none', height: '300px', overflow: 'auto' }}
                     value={desc}
                     onChange={(e) => setDesc(e?.target?.value)}
                   />
