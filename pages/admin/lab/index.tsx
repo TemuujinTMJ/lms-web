@@ -18,7 +18,7 @@ const columns = [
     key: 'floor',
   },
   {
-    title: 'Лабораторын ангийн дугаар',
+    title: 'Лабораториын ангийн дугаар',
     dataIndex: 'room',
     key: 'room',
   },

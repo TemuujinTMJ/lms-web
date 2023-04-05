@@ -6,7 +6,6 @@ import { useRouter } from 'next/router';
 import { useAppDispatch, useAppSelector } from '@/modules/hooks';
 import { getUserLaboratory } from '@/modules/user/laboratory/laboratory.services';
 
-import image from '../../public/pictures/pano.jpg';
 import style from './index.module.css';
 
 const User = () => {
@@ -35,12 +34,12 @@ const User = () => {
       key: 'floor',
     },
     {
-      title: 'Лабораторын ангийн дугаар',
+      title: 'Лабораторийн ангийн дугаар',
       dataIndex: 'room',
       key: 'room',
     },
     {
-      title: 'Лабораторын нэршил',
+      title: 'Лабораторийн нэршил',
       dataIndex: 'title',
       key: 'title',
     },

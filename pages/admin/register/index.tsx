@@ -47,7 +47,7 @@ const Index = () => {
       key: 'floor',
     },
     {
-      title: 'Лабораторын ангийн дугаар',
+      title: 'Лабораторийн ангийн дугаар',
       dataIndex: 'room',
       key: 'room',
     },
@@ -78,7 +78,7 @@ const Index = () => {
               })}
             </div>
           }
-          title="Лабораторын зургууд"
+          title="Лабораторийн зургууд"
           trigger="click"
         >
           <Button>Зургууд харах</Button>
@@ -163,9 +163,10 @@ const Index = () => {
       key: 'title',
     },
     {
-      title: 'Лаборатор',
+      title: 'Лаборатори',
       dataIndex: 'laboratory',
       key: 'laboratory',
+      render: (_, record) => <>{record?.laboratory?.room}</>,
     },
     {
       title: 'Модель',
@@ -194,12 +195,43 @@ const Index = () => {
       key: 'price',
     },
     {
+      title: 'Төхөөрөмжийн зураг',
+      key: 'name',
+      render: (_, record) => (
+        <Popover
+          content={
+            <div style={{ display: 'flex' }}>
+              {record?.medias.map((med, key) => {
+                return (
+                  <Image
+                    key={key}
+                    alt=""
+                    width={100}
+                    height={100}
+                    style={{ padding: '10px' }}
+                    src={`${config.HOST}${med.path}`}
+                  />
+                );
+              })}
+            </div>
+          }
+          title="Лабораторийн зургууд"
+          trigger="click"
+        >
+          <Button>Зураг харах</Button>
+        </Popover>
+      ),
+    },
+    {
       render: (_, record) => <Button onClick={() => Edit(record)}>Засах</Button>,
     },
   ];
   const [edit, setEdit] = useState(false);
   function Edit(e) {
+    console.log(e);
     form.setFieldsValue(e);
+    form.setFieldsValue({ laboratory: e?.laboratory?._id });
+    form.setFieldsValue({ teacher: e?.teacher?._id });
     form.setFieldsValue({ manufacturedDate: dayjs(moment(e?.manufacturedDate).format('YYYY/MM/DD'), 'YYYY/MM/DD') });
     setIsModalOpen(true);
     setEdit(true);
@@ -453,7 +485,7 @@ const Index = () => {
         </div>
         <div className={style.card} onClick={() => setType(1)}>
           <Image src="/icons/checkList.png" alt="" width={50} height={50} preview={false} />
-          <div style={{ width: '160px' }}>Лабораторын анги бүртгэл</div>
+          <div style={{ width: '160px' }}>Лабораторийн анги бүртгэл</div>
         </div>
         <div className={style.card} onClick={() => setType(2)}>
           <Image src="/icons/user-tie.png" alt="" width={50} height={50} preview={false} />
@@ -570,7 +602,7 @@ const Index = () => {
                 ]}
               />
             </Form.Item>
-            <Form.Item label="Лабораторын нэршил" name="title">
+            <Form.Item label="Лабораторийн нэршил" name="title">
               <Input />
             </Form.Item>
             <Form.Item label="Давхар" name="floor">
@@ -603,7 +635,7 @@ const Index = () => {
                 <div>
                   {edit ? (
                     <Popconfirm
-                      title="Лабортор устгах"
+                      title="Лаборатори устгах"
                       description="Устгахдаа итгэлтай байна уу?"
                       onConfirm={() => onDelete({ type: 'lab' })}
                       okText="Тийм"
@@ -686,7 +718,7 @@ const Index = () => {
             <Form.Item label="Төхөөрөмж нэр" name="title">
               <Input />
             </Form.Item>
-            <Form.Item label="Лабортор" name="laboratory">
+            <Form.Item label="Лаборатори" name="laboratory">
               <Select
                 showSearch
                 optionFilterProp="children"

@@ -24,7 +24,7 @@ const NavBar = () => {
         return 'Захиалга харах';
         break;
       case '/laborant/labUsage':
-        return 'Лаборатор ашиглалт';
+        return 'Лаборатори ашиглалт';
         break;
       case '/laborant/report':
         return 'Тайлан';
@@ -33,7 +33,7 @@ const NavBar = () => {
         return 'Бүртгэл';
         break;
       case '/admin/lab':
-        return 'Лаборатор ашиглалт';
+        return 'Лаборатори ашиглалт';
         break;
       case '/admin/list':
         return 'Жагсаалт';
@@ -45,7 +45,7 @@ const NavBar = () => {
         return 'Захиалгын жагсаалт';
         break;
       default:
-        return 'Лабортор';
+        return 'Лаборатори';
     }
   }
   function Icon() {

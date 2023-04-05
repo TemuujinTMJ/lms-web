@@ -69,7 +69,7 @@ const Index = () => {
       ),
     },
     {
-      title: 'Лабораторын нэршил',
+      title: 'Лабораторийн нэршил',
       dataIndex: 'title',
       key: 'title',
       render: (_, record) => <>{record?.laboratory?.title}</>,
@@ -113,7 +113,7 @@ const Index = () => {
           {record?.status === 'pending' ? (
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
               <Popconfirm
-                title="Захиалгй цуцлах"
+                title="Захиалга цуцлах"
                 description="Хүлээгдэж буй захиалгыг цуцлахдаа итгэлтэй байна уу??"
                 onConfirm={() => {
                   dispatch(postTeacherRequest({ request_id: record?._id, status: 'declined' })).then((d) => {

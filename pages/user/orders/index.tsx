@@ -103,7 +103,7 @@ const Index = () => {
       render: (_, record) => <>{record?.device?.title}</>,
     },
     {
-      title: 'Лабортор хариуцагч',
+      title: 'Лаборатори хариуцагч',
       dataIndex: 'laborant',
       key: 'laborant',
       render: (_, record) => (
@@ -154,7 +154,7 @@ const Index = () => {
             {text === 'pending' ? 'Хүлээгдэж байна' : null}
           </Tag>
           <Popconfirm
-            title="Захиалгй устгах"
+            title="Захиалга устгах"
             description="Хүлээгдэж буй захиалгыг устгахдаа итгэлтэй байна уу??"
             onConfirm={() =>
               dispatch(deleteUserRequest({ _id: record?._id })).then((d) => {

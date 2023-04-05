@@ -79,6 +79,7 @@ const Index = () => {
           type: 'day',
         }),
       ).then((d) => {
+        console.log(d?.payload);
         if (d?.payload?.success) {
           dispatch(postUserDevoceOrders({ device_id: device?._id, date: isoString, type: 'day' }));
         }
@@ -95,6 +96,7 @@ const Index = () => {
           type: 'hour',
         }),
       ).then((d) => {
+        console.log(d?.payload);
         if (d?.payload?.success) {
           dispatch(postUserDevoceOrders({ device_id: device?._id, date: isoString, type: 'hour' }));
         }
@@ -159,7 +161,7 @@ const Index = () => {
         </Col>
         <Col className={style.cols} span={8}>
           <div className={style.col}>
-            <div className={style.text}>Лаботароийн ангийн дугаар</div>
+            <div className={style.text}>Лабораторийн ангийн дугаар</div>
             <div className={style.card}>{laboratory?.room}</div>
           </div>
         </Col>
@@ -171,7 +173,7 @@ const Index = () => {
         </Col>
         <Col className={style.cols} span={8}>
           <div className={style.col}>
-            <div className={style.text}>Лабораторын нэршил</div>
+            <div className={style.text}>Лабораторийн нэршил</div>
             <div className={style.card}>{laboratory?.title}</div>
           </div>
         </Col>
