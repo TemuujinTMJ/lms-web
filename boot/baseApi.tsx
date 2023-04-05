@@ -14,11 +14,11 @@ export const api = axios.create(axiosConfig);
 api.interceptors.response.use(
   function (response: any) {
     const data = response || {};
-    if (data?.data?.success && data?.data?.sucmod && data?.data?.msg) {
-      message.success(data?.data?.msg);
+    if (data?.data?.success && data?.data?.sucmod && data?.data?.message) {
+      message.success(data?.data?.message);
     }
-    if (!data?.data?.success && data?.data?.msg) {
-      message.warning(data?.data?.msg);
+    if (!data?.data?.success && data?.data?.message) {
+      message.warning(data?.data?.message);
     }
     return data;
   },
