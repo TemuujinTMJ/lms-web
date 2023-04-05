@@ -20,7 +20,6 @@ api.interceptors.response.use(
     if (!data?.data?.success && data?.data?.msg) {
       message.warning(data?.data?.msg);
     }
-    // console.log(data);
     return data;
   },
   function (error) {

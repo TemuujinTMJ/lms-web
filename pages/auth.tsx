@@ -14,7 +14,6 @@ export default function ({ children }) {
 
   useEffect(() => {
     if (!token && router.pathname !== '/') {
-      console.log('enter');
       window.location.assign('/');
     } else if (token && router.pathname === '/') {
       dispatch(getUser()).then((c) => {
