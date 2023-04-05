@@ -228,7 +228,6 @@ const Index = () => {
   ];
   const [edit, setEdit] = useState(false);
   function Edit(e) {
-    console.log(e);
     form.setFieldsValue(e);
     form.setFieldsValue({ laboratory: e?.laboratory?._id });
     form.setFieldsValue({ teacher: e?.teacher?._id });

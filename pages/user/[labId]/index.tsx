@@ -79,7 +79,6 @@ const Index = () => {
           type: 'day',
         }),
       ).then((d) => {
-        console.log(d?.payload);
         if (d?.payload?.success) {
           dispatch(postUserDevoceOrders({ device_id: device?._id, date: isoString, type: 'day' }));
         }
@@ -96,7 +95,6 @@ const Index = () => {
           type: 'hour',
         }),
       ).then((d) => {
-        console.log(d?.payload);
         if (d?.payload?.success) {
           dispatch(postUserDevoceOrders({ device_id: device?._id, date: isoString, type: 'hour' }));
         }
