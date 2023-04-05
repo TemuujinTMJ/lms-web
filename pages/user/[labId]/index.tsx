@@ -51,7 +51,7 @@ const Index = () => {
   const { laboratory, submitLoading, orders } = useAppSelector((state) => state.userLaboratoryReducer);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [device, setDevice] = useState({ _id: '', title: '' });
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState('hour');
   const [date, setDate] = useState(new Date());
   const [state, setState] = useState([
     {
@@ -65,6 +65,19 @@ const Index = () => {
     },
   ]);
   const showModal = (dev) => {
+    setValue('hour');
+    setState([
+      {
+        startDate: new Date(),
+        endDate: new Date(),
+        key: 'selection',
+        color: undefined,
+        autoFocus: undefined,
+        disabled: undefined,
+        showDateDisplay: undefined,
+      },
+    ]);
+    setDate(new Date());
     setDesc('');
     setCheckedList([]);
     setDevice({ _id: dev?._id, title: dev?.title });
@@ -280,7 +293,7 @@ const Index = () => {
         cancelText="Цуцлах"
       >
         <div>
-          <Radio.Group defaultValue="hour" size="large" onChange={(e) => orderFunc(e?.target?.value)}>
+          <Radio.Group value={value} size="large" onChange={(e) => orderFunc(e?.target?.value)}>
             <Radio.Button value="hour">Цагаар</Radio.Button>
             <Radio.Button value="day">Өдрөөр</Radio.Button>
           </Radio.Group>
