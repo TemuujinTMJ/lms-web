@@ -48,6 +48,48 @@ const NavBar = () => {
         return 'Лаборатори';
     }
   }
+  function SubTitle() {
+    switch (route.asPath) {
+      case '/admin':
+        return 'Дэлгэрэнгүй мэдээлэл';
+        break;
+      case '/user':
+        return 'Дэлгэрэнгүй мэдээлэл';
+        break;
+      case '/user/orders':
+        return 'Захиалгууд';
+        break;
+      case '/laborant':
+        return 'Дэлгэрэнгүй мэдээлэл';
+        break;
+      case '/laborant/orderList':
+        return 'Захиалга харах';
+        break;
+      case '/laborant/labUsage':
+        return 'Төхөөрөмж лист хэсэг';
+        break;
+      case '/laborant/report':
+        return 'Тайлан';
+        break;
+      case '/admin/register':
+        return 'Бүртгэх хэсэг';
+        break;
+      case '/admin/lab':
+        return 'Төхөөрөмж лист хэсэг';
+        break;
+      case '/admin/list':
+        return 'Жагсаалт';
+        break;
+      case '/admin/userRegister':
+        return 'Хэрэглэгчийн бүртгэл';
+        break;
+      case '/admin/orderList':
+        return 'Төхөөрөмж лист хэсэг';
+        break;
+      default:
+        return 'Лаборатори';
+    }
+  }
   function Icon() {
     switch (route.asPath) {
       case '/admin':
@@ -98,16 +140,16 @@ const NavBar = () => {
           <Image src={Icon()} alt="" width={25} height={25} style={{ marginLeft: '15px' }} />
         </div>
         <div style={{ fontSize: '15px', color: 'gray' }}>
-          Дэлгэрэнгүй мэдээлэл
+          {SubTitle()}
           <Image src="/icons/more.png" alt="" width={15} height={10} style={{ marginLeft: '5px' }} />
         </div>
       </div>
 
-      <div className={style.pro}>
+      {/* <div className={style.pro}>
         <Image src="/icons/info.png" alt="" width={35} height={35} />
         <Image src="/icons/bell.png" alt="" width={35} height={35} />
         <Image src="/icons/menu1black.png" alt="" width={35} height={35} style={{ borderRadius: '16px' }} />
-      </div>
+      </div> */}
     </div>
   );
 };

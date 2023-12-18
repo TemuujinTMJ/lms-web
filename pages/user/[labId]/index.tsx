@@ -205,7 +205,7 @@ const Index = () => {
         <Col className={style.cols} span={8}>
           <div className={style.col}>
             <div className={style.text}>Хариуцсан багшийн нэр</div>
-            <div className={style.card}>
+            <div className={style.card} style={{ backgroundColor: '#F3EEF4' }}>
               <Popover
                 content={
                   <>
@@ -230,7 +230,7 @@ const Index = () => {
                 title="Багшийн мэдээлэл"
                 trigger="click"
               >
-                <a>{laboratory?.teacher?.first_name}</a>
+                <div style={{ cursor: 'pointer' }}>{laboratory?.teacher?.first_name}</div>
               </Popover>
             </div>
           </div>

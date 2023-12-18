@@ -86,7 +86,20 @@ const Index = () => {
       ),
     },
     {
-      render: (_, record) => <Button onClick={() => Edit(record)}>Засах</Button>,
+      render: (_, record) => (
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <Button onClick={() => Edit(record)}>Засах</Button>
+          <Popconfirm
+            title="Лаборатори устгах"
+            description="Устгахдаа итгэлтай байна уу?"
+            onConfirm={() => onDelete({ type: 'lab' })}
+            okText="Тийм"
+            cancelText="Үгүй"
+          >
+            <Button danger>Устгах</Button>
+          </Popconfirm>
+        </div>
+      ),
     },
   ];
   const columns0 = [
@@ -223,7 +236,20 @@ const Index = () => {
       ),
     },
     {
-      render: (_, record) => <Button onClick={() => Edit(record)}>Засах</Button>,
+      render: (_, record) => (
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <Button onClick={() => Edit(record)}>Засах</Button>
+          <Popconfirm
+            title="Төхөөрөмж устгах"
+            description="Устгахдаа итгэлтай байна уу?"
+            onConfirm={() => onDelete({ type: 'device' })}
+            okText="Тийм"
+            cancelText="Үгүй"
+          >
+            <Button danger>Устгах</Button>
+          </Popconfirm>
+        </div>
+      ),
     },
   ];
   const [edit, setEdit] = useState(false);
@@ -241,7 +267,7 @@ const Index = () => {
   const { devices } = useAppSelector((state) => state.adminDeviceReducer);
   const { users } = useAppSelector((state) => state.adminUserReducer);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [type, setType] = useState(1);
+  const [type, setType] = useState(0);
   const [form] = Form.useForm();
 
   const showModal = () => {
@@ -477,26 +503,48 @@ const Index = () => {
   return (
     <div>
       <div className={style.cards}>
-        <div className={style.card} onClick={() => setType(0)}>
+        <div
+          className={style.card}
+          onClick={() => setType(0)}
+          style={{ backgroundColor: type === 0 ? '#52769A' : '#9EB6CD' }}
+        >
           <Image src="/icons/user-tie.png" alt="" width={50} height={50} preview={false} />
           <div style={{ width: '160px' }}>Хэрэглэгчийн бүртгэл</div>
         </div>
-        <div className={style.card} onClick={() => setType(1)}>
+        <div
+          className={style.card}
+          onClick={() => setType(1)}
+          style={{ backgroundColor: type === 1 ? '#52769A' : '#9EB6CD' }}
+        >
           <Image src="/icons/checkList.png" alt="" width={50} height={50} preview={false} />
           <div style={{ width: '160px' }}>Лабораторийн анги бүртгэл</div>
         </div>
-        <div className={style.card} onClick={() => setType(2)}>
+        <div
+          className={style.card}
+          onClick={() => setType(2)}
+          style={{ backgroundColor: type === 2 ? '#52769A' : '#9EB6CD' }}
+        >
           <Image src="/icons/user-tie.png" alt="" width={50} height={50} preview={false} />
           <div style={{ width: '160px' }}>Лаборатори хариуцсан багшийн бүртгэл</div>
         </div>
-        <div className={style.card} onClick={() => setType(3)}>
+        <div
+          className={style.card}
+          onClick={() => setType(3)}
+          style={{ backgroundColor: type === 3 ? '#52769A' : '#9EB6CD' }}
+        >
           <Image src="/icons/note.png" alt="" width={50} height={50} preview={false} />
           <div style={{ width: '160px' }}>Лабораторийн төхөөрөмж бүртгэл</div>
         </div>
       </div>
       <div className={style.subTitle}>
-        Бүртгэл харах
-        <Button type="primary" onClick={showModal}>
+        {type === 0
+          ? 'Хэрэглэгчийн бүртгэл'
+          : type === 1
+          ? 'Лабораторийн ангийн бүртгэл'
+          : type === 2
+          ? 'Лаборатори хариуцсан багшийн бүртгэл'
+          : 'Лаборатори төхөөрөмжийн бүртгэл'}
+        <Button type="primary" onClick={showModal} className={style.btn}>
           <Image src="/icons/add.png" alt="" width={10} height={10} style={{ marginRight: '10px' }} />{' '}
           {type === 0
             ? 'Хэрэглэгч нэмэх'
