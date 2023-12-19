@@ -75,8 +75,8 @@ const Admin = () => {
       {
         label: 'Dataset 1',
         data: result,
-        borderColor: 'rgb(255, 99, 132)',
-        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        borderColor: 'rgba(0, 0, 0, 0.267)',
+        backgroundColor: 'rgba(0, 0, 0, 0.262)',
       },
     ],
   };

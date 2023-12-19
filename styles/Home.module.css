@@ -44,8 +44,8 @@
 
 .reset {
   width: 220px;
-  border-left: 2px solid #9c60d7;
-  color: #9c60d7;
+  border-left: 2px solid #52769A;
+  color: #52769A;
   padding: 5px;
   padding-right: 0px;
   font-weight: 700;
@@ -61,7 +61,7 @@
 }
 
 .login {
-  background-color: #9c60d7;
+  background-color: #52769A;
   color: white;
   width: 150px;
   height: 40px;

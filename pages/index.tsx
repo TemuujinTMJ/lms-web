@@ -132,6 +132,7 @@ const Home = () => {
             onClick={() => [setRole('admin'), setPassword(''), setUsername('')]}
             style={{
               border: role === 'admin' ? '1px solid #7dd1fd' : '1px solid black',
+              backgroundColor: '#F7F7F7',
             }}
           >
             <Image src="/images/admin.png" alt="" width={200} height={200} />
@@ -150,7 +151,9 @@ const Home = () => {
             />
           </div>
         </div>
-        <p style={{ fontSize: '16px', fontWeight: 'bold', margin: '50px' }}>Тавтай морилно уу хэрэглэгч</p>
+        <p style={{ fontSize: '16px', fontWeight: 'bold', margin: '50px' }}>
+          Тавтай морилно уу {role === 'customer' ? 'хэрэглэгч' : role === 'admin' ? 'админ' : 'багш'}
+        </p>
         {role === 'customer' ? (
           <>
             <div className={style.input}>
