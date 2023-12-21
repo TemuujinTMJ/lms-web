@@ -18,7 +18,12 @@ const columns = [
     key: 'floor',
   },
   {
-    title: 'Лабораториын ангийн дугаар',
+    title: 'Лабораторийн нэршил',
+    dataIndex: 'title',
+    key: 'title',
+  },
+  {
+    title: 'Лабораторийн ангийн дугаар',
     dataIndex: 'room',
     key: 'room',
   },
@@ -51,7 +56,9 @@ const columns = [
         title="Багшийн мэдээлэл"
         trigger="click"
       >
-        <a>{record?.teacher?.first_name}</a>
+        <a>
+          {record?.teacher?.last_name} {record?.teacher?.first_name}
+        </a>
       </Popover>
     ),
   },
@@ -65,22 +72,67 @@ const columns = [
   },
 ];
 
+// ... (existing imports)
+
 const Index = () => {
   const { loadingLab, labUsages } = useAppSelector((state) => state.adminHomeReducer);
   const dispatch = useAppDispatch();
+  const [searchText, setSearchText] = React.useState('');
+  const [searchCategory, setSearchCategory] = React.useState('room');
+
   useEffect(() => {
     dispatch(getAdminLabUsage({ pageNum: 0, pageSize: 0 }));
   }, []);
+
+  const handleSearch = (value) => {
+    setSearchText(value);
+  };
+
+  const handleCategoryChange = (value) => {
+    setSearchCategory(value);
+    setSearchText(''); // Clear the search text when the category changes
+  };
+
+  const filteredLabUsages = labUsages.filter((item) => {
+    if (searchCategory === 'teacher') {
+      // Handle teacher search separately
+      const teacherInfo = item.teacher || {};
+      const teacherFullName = `${teacherInfo.first_name} ${teacherInfo.last_name}`.toLowerCase();
+
+      return (
+        teacherFullName.includes(searchText.toLowerCase()) ||
+        teacherInfo.phone.includes(searchText.toLowerCase()) ||
+        teacherInfo.email.includes(searchText.toLowerCase())
+      );
+    }
+
+    // Handle other search categories
+    const valueToSearch =
+      typeof item[searchCategory] === 'string'
+        ? item[searchCategory].toLowerCase()
+        : String(item[searchCategory]).toLowerCase();
+
+    return valueToSearch.includes(searchText.toLowerCase());
+  });
+
   return (
     <div>
       <div className={style.header}>
         <div>
-          Анги:
-          <Select placeholder="сонгоно уу" style={{ marginLeft: '10px', width: '200px' }} />
+          <Select
+            defaultValue="room"
+            style={{ width: 300 }}
+            onChange={handleCategoryChange}
+            options={[
+              { value: 'room', label: 'Лабораторийн ангийн дугаараар' },
+              { value: 'teacher', label: 'Хариуцсан багшийн мэдээллээр' },
+              { value: 'title', label: 'Лабораторийн нэршилээр' },
+            ]}
+          />
         </div>
-        <Input placeholder="Хайх" style={{ width: '200px' }} />
+        <Input placeholder="Хайх" style={{ width: '200px' }} onChange={(e) => handleSearch(e.target.value)} />
       </div>
-      <Table dataSource={labUsages} columns={columns} loading={loadingLab} />
+      <Table dataSource={filteredLabUsages} columns={columns} loading={loadingLab} />
     </div>
   );
 };

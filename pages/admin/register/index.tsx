@@ -618,7 +618,7 @@ const Index = () => {
                     </Popconfirm>
                   ) : null}
                 </div>
-                <Button type="primary" htmlType="submit">
+                <Button type="primary" htmlType="submit" className={style.btn}>
                   Бүртгүүлэх
                 </Button>
               </div>
@@ -691,7 +691,7 @@ const Index = () => {
                     </Popconfirm>
                   ) : null}
                 </div>
-                <Button type="primary" htmlType="submit">
+                <Button type="primary" htmlType="submit" className={style.btn}>
                   Бүртгүүлэх
                 </Button>
               </div>
@@ -744,7 +744,7 @@ const Index = () => {
                     </Popconfirm>
                   ) : null}
                 </div>
-                <Button type="primary" htmlType="submit">
+                <Button type="primary" htmlType="submit" className={style.btn}>
                   Бүртгүүлэх
                 </Button>
               </div>
@@ -811,7 +811,7 @@ const Index = () => {
                     </Popconfirm>
                   ) : null}
                 </div>
-                <Button type="primary" htmlType="submit">
+                <Button type="primary" htmlType="submit" className={style.btn}>
                   {edit ? 'Засах' : 'Бүртгүүлэх'}
                 </Button>
               </div>

@@ -1,8 +1,9 @@
 .header {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    padding: 50px
+    justify-content: flex-end;
+    padding: 50px;
+    gap: 20px;
 }
 
 .flex {
