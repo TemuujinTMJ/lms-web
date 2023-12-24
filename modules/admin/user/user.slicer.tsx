@@ -42,7 +42,7 @@ const adminUserReducer = createSlice({
       const result = action.payload || {};
       state.loading = false;
       if (result.success) {
-        state.users = result.users || [];
+        state.users = result.users.filter((item) => item.role === 'customer') || [];
       } else {
         state.users = [];
       }

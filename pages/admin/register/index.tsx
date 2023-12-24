@@ -269,7 +269,6 @@ const Index = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [type, setType] = useState(0);
   const [form] = Form.useForm();
-
   const showModal = () => {
     form.resetFields();
     setIsModalOpen(true);
