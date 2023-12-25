@@ -253,7 +253,36 @@ const Index = () => {
     },
   ];
   const [edit, setEdit] = useState(false);
+  const [fileList, setFileList] = useState([]);
+  const [files, setFiles] = useState([]);
+  const [imgs, setImgs] = useState([]);
+  const [img, setImg] = useState([]);
+
   function Edit(e) {
+    setImgs(e.medias.filter((d) => d.type === 'image').map((c) => c._id));
+    setImg(e.medias.filter((d) => d.type === 'pano').map((c) => c._id));
+    setFiles(
+      e.medias
+        .filter((d) => d.type === 'pano')
+        .map((c) => ({
+          response: { image: { _id: c._id } },
+          uid: c.id,
+          name: c.name,
+          status: 'done',
+          url: `http://lims.sict.edu.mn/api${c.path}`,
+        })),
+    );
+    setFileList(
+      e.medias
+        .filter((d) => d.type === 'image')
+        .map((c) => ({
+          response: { image: { _id: c._id } },
+          uid: c.id,
+          name: c.name,
+          status: 'done',
+          url: `http://lims.sict.edu.mn/api${c.path}`,
+        })),
+    );
     form.setFieldsValue(e);
     form.setFieldsValue({ laboratory: e?.laboratory?._id });
     form.setFieldsValue({ teacher: e?.teacher?._id });
@@ -274,7 +303,6 @@ const Index = () => {
     setIsModalOpen(true);
     setEdit(false);
   };
-
   const handleCancel = () => {
     setIsModalOpen(false);
   };
@@ -312,7 +340,7 @@ const Index = () => {
     });
   };
   function onFinishDevice(values) {
-    dispatch(postAdminDevice({ ...values, medias: imageId })).then((e) => {
+    dispatch(postAdminDevice({ ...values, medias: img })).then((e) => {
       if (e?.payload?.success) {
         success();
         setIsModalOpen(false);
@@ -355,10 +383,7 @@ const Index = () => {
     });
   }
   function onFinishLaboratory(values) {
-    if (imageId.length > 0) {
-      imageIds.push(imageId[0]);
-    }
-    dispatch(postAdminLaboratory({ ...values, medias: imageIds })).then((e) => {
+    dispatch(postAdminLaboratory({ ...values, medias: imgs.concat(img) })).then((e) => {
       if (e?.payload?.success) {
         success();
         setIsModalOpen(false);
@@ -371,7 +396,6 @@ const Index = () => {
       }
     });
   }
-
   function onDelete(e) {
     if (e?.type === 'user') {
       dispatch(deleteAdminUser({ _id: form.getFieldValue('_id') })).then((d) => {
@@ -430,14 +454,14 @@ const Index = () => {
       });
     }
   }
-  let imageIds = [];
   function handleUpload(info: any) {
+    setFileList(info.fileList);
     if (info.file.status === 'done') {
       message.success(`${info.file.name} file uploaded successfully`);
     } else if (info.file.status === 'error') {
       message.error(`${info.file.name} file upload failed.`);
     }
-    imageIds = info?.fileList.map((image) => image?.response?.image._id);
+    setImgs(info?.fileList.map((image) => image?.response?.image._id));
   }
   function beforeUpload(file: any) {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -450,14 +474,15 @@ const Index = () => {
     }
     return isJpgOrPng && isLt10M;
   }
-  let imageId = [];
+
   function handleUploadSingle(info: any) {
+    setFiles(info.fileList);
     if (info.file.status === 'done') {
       message.success(`${info.file.name} file uploaded successfully`);
     } else if (info.file.status === 'error') {
       message.error(`${info.file.name} file upload failed.`);
     }
-    imageId = info?.fileList.map((image) => image?.response?.image._id);
+    setImg(info?.fileList.map((image) => image?.response?.image._id));
   }
   function beforeUploadSingle(file: any) {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -481,6 +506,7 @@ const Index = () => {
     headers: {
       authorization: Cookies.get('token'),
     },
+    fileList,
     beforeUpload,
     onChange: handleUpload,
   };
@@ -496,6 +522,7 @@ const Index = () => {
     headers: {
       authorization: Cookies.get('token'),
     },
+    fileList: files,
     beforeUpload: beforeUploadSingle,
     onChange: handleUploadSingle,
   };
