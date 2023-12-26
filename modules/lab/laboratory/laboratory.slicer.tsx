@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import {
-  getUserLaboratory,
+  getTeacherLaboratory,
+  postTeacherLaboratorySingle,
   postUserDevoceOrders,
   postUserLaboratoryDeviceOrder,
-  postUserLaboratorySingle,
 } from './laboratory.services';
 
 interface iInitialState {
@@ -31,10 +31,10 @@ const userLaboratoryReducer = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     // get labs
-    builder.addCase(getUserLaboratory.pending, (state) => {
+    builder.addCase(getTeacherLaboratory.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(getUserLaboratory.fulfilled, (state, action: PayloadAction<any>) => {
+    builder.addCase(getTeacherLaboratory.fulfilled, (state, action: PayloadAction<any>) => {
       const result = action.payload || {};
       state.loading = false;
       if (result.success) {
@@ -43,22 +43,22 @@ const userLaboratoryReducer = createSlice({
         state.laboratories = [];
       }
     });
-    builder.addCase(getUserLaboratory.rejected, (state) => {
+    builder.addCase(getTeacherLaboratory.rejected, (state) => {
       state.loading = false;
       state.laboratories = [];
     });
     // get laboratory
-    builder.addCase(postUserLaboratorySingle.pending, (state) => {
+    builder.addCase(postTeacherLaboratorySingle.pending, (state) => {
       state.submitLoading = true;
     });
-    builder.addCase(postUserLaboratorySingle.fulfilled, (state, action: PayloadAction<any>) => {
+    builder.addCase(postTeacherLaboratorySingle.fulfilled, (state, action: PayloadAction<any>) => {
       const result = action.payload || {};
       state.submitLoading = false;
       if (result.success) {
         state.laboratory = result?.laboratory;
       }
     });
-    builder.addCase(postUserLaboratorySingle.rejected, (state) => {
+    builder.addCase(postTeacherLaboratorySingle.rejected, (state) => {
       state.laboratory = {};
       state.submitLoading = false;
     });

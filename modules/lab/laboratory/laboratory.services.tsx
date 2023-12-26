@@ -3,13 +3,13 @@ import queryString from 'query-string';
 
 import { api } from '@/boot/baseApi';
 
-export const getUserLaboratory = createAsyncThunk('customer/laboratory/get', async (data: object) => {
-  const url = `/customer/laboratory/get`;
+export const getTeacherLaboratory = createAsyncThunk('customer/laboratory/get', async (data: object) => {
+  const url = `/teacher/laboratory/get/data`;
   return api.post(url, data).then((response) => response.data);
 });
 
-export const postUserLaboratorySingle = createAsyncThunk('customer/laboratory/get/single', async (data: object) => {
-  const url = `/customer/laboratory/get/single?${queryString.stringify(data)}`;
+export const postTeacherLaboratorySingle = createAsyncThunk('customer/laboratory/get/single', async (data: object) => {
+  const url = `/teacher/laboratory/get/single?${queryString.stringify(data)}`;
   return api.get(url).then((response) => response.data);
 });
 

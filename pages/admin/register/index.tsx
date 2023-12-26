@@ -259,11 +259,11 @@ const Index = () => {
   const [img, setImg] = useState([]);
 
   function Edit(e) {
-    setImgs(e.medias.filter((d) => d.type === 'image').map((c) => c._id));
-    setImg(e.medias.filter((d) => d.type === 'pano').map((c) => c._id));
+    setImgs(e.medias?.filter((d) => d.type === 'image').map((c) => c._id));
+    setImg(e.medias?.filter((d) => d.type === 'pano').map((c) => c._id));
     setFiles(
       e.medias
-        .filter((d) => d.type === 'pano')
+        ?.filter((d) => d.type === 'pano')
         .map((c) => ({
           response: { image: { _id: c._id } },
           uid: c.id,
@@ -274,7 +274,7 @@ const Index = () => {
     );
     setFileList(
       e.medias
-        .filter((d) => d.type === 'image')
+        ?.filter((d) => d.type === 'image')
         .map((c) => ({
           response: { image: { _id: c._id } },
           uid: c.id,

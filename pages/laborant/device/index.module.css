@@ -1,0 +1,17 @@
+.subTitle {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 50px;
+    font-size: 30px;
+    font-weight: 400;
+    padding-top: 50px;
+}
+
+.btn {
+    border-radius: 5px;
+    background: #B9D9F6;
+    color: #000;
+    display: flex;
+    gap: 10px;
+}
