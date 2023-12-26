@@ -89,7 +89,7 @@ const Index = () => {
       render: (_, record) => (
         <div style={{ display: 'flex', gap: '10px' }}>
           <Button onClick={() => Edit(record)}>Засах</Button>
-          <Popconfirm
+          {/* <Popconfirm
             title="Лаборатори устгах"
             description="Устгахдаа итгэлтай байна уу?"
             onConfirm={() => onDelete({ type: 'lab' })}
@@ -97,7 +97,7 @@ const Index = () => {
             cancelText="Үгүй"
           >
             <Button danger>Устгах</Button>
-          </Popconfirm>
+          </Popconfirm> */}
         </div>
       ),
     },
@@ -239,7 +239,7 @@ const Index = () => {
       render: (_, record) => (
         <div style={{ display: 'flex', gap: '10px' }}>
           <Button onClick={() => Edit(record)}>Засах</Button>
-          <Popconfirm
+          {/* <Popconfirm
             title="Төхөөрөмж устгах"
             description="Устгахдаа итгэлтай байна уу?"
             onConfirm={() => onDelete({ type: 'device' })}
@@ -247,7 +247,7 @@ const Index = () => {
             cancelText="Үгүй"
           >
             <Button danger>Устгах</Button>
-          </Popconfirm>
+          </Popconfirm> */}
         </div>
       ),
     },
@@ -309,7 +309,7 @@ const Index = () => {
   useEffect(() => {
     dispatch(
       getAdminUser({
-        pageSize: 10,
+        pageSize: 0,
         pageNum: 0,
       }),
     );
@@ -321,7 +321,7 @@ const Index = () => {
     );
     dispatch(
       getAdminDevice({
-        pageSize: 10,
+        pageSize: 0,
         pageNum: 0,
       }),
     );
@@ -347,7 +347,7 @@ const Index = () => {
 
         dispatch(
           getAdminDevice({
-            pageSize: 10,
+            pageSize: 0,
             pageNum: 0,
           }),
         );
@@ -361,7 +361,7 @@ const Index = () => {
         setIsModalOpen(false);
         dispatch(
           getAdminUser({
-            pageSize: 10,
+            pageSize: 0,
             pageNum: 0,
           }),
         );
@@ -404,7 +404,7 @@ const Index = () => {
           setIsModalOpen(false);
           dispatch(
             getAdminUser({
-              pageSize: 10,
+              pageSize: 0,
               pageNum: 0,
             }),
           );
@@ -418,7 +418,7 @@ const Index = () => {
           setIsModalOpen(false);
           dispatch(
             getAdminDevice({
-              pageSize: 10,
+              pageSize: 0,
               pageNum: 0,
             }),
           );
@@ -526,6 +526,7 @@ const Index = () => {
     beforeUpload: beforeUploadSingle,
     onChange: handleUploadSingle,
   };
+  console.log(devices);
   return (
     <div>
       <div className={style.cards}>

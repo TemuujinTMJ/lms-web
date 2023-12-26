@@ -150,7 +150,7 @@ const Index = () => {
   useEffect(() => {
     dispatch(
       getTeacherDevice({
-        pageSize: 10,
+        pageSize: 0,
         pageNum: 0,
       }),
     );
@@ -181,7 +181,7 @@ const Index = () => {
 
         dispatch(
           getTeacherDevice({
-            pageSize: 10,
+            pageSize: 0,
             pageNum: 0,
           }),
         );
@@ -189,14 +189,13 @@ const Index = () => {
     });
   }
   function onDelete() {
-    console.log(form.getFieldValue('_id'));
     dispatch(deleteTeacherDevice({ _id: form.getFieldValue('_id') })).then((d) => {
       if (d?.payload?.success) {
         success();
         setIsModalOpen(false);
         dispatch(
           getTeacherDevice({
-            pageSize: 10,
+            pageSize: 0,
             pageNum: 0,
           }),
         );
