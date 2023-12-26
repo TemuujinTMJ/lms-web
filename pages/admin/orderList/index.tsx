@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Popconfirm, Popover, Table, Tag } from 'antd';
 import moment from 'moment';
 
@@ -154,6 +154,7 @@ const Index = () => {
   ];
   const dispatch = useAppDispatch();
   const { requests } = useAppSelector((state) => state.adminRequestReducer);
+  const [type, setType] = useState(0);
   useEffect(() => {
     dispatch(getAdminRequest({ pageNum: 0, pageSize: 0 }));
   }, []);
@@ -161,18 +162,24 @@ const Index = () => {
     <div>
       <div className={style.header}>
         <div className={style.cards}>
-          <div className={style.card} onClick={() => dispatch(getAdminRequest({ pageNum: 0, pageSize: 0 }))}>
+          <div
+            className={style.card}
+            onClick={() => [dispatch(getAdminRequest({ pageNum: 0, pageSize: 0 })), setType(0)]}
+            style={{ backgroundColor: type === 0 ? '#52769A' : '#9EB6CD' }}
+          >
             Захиалгууд
           </div>
           <div
             className={style.card}
-            onClick={() => dispatch(getAdminRequest({ pageNum: 0, pageSize: 0, status: 'approved' }))}
+            onClick={() => [dispatch(getAdminRequest({ pageNum: 0, pageSize: 0, status: 'approved' })), setType(1)]}
+            style={{ backgroundColor: type === 1 ? '#52769A' : '#9EB6CD' }}
           >
             Баталгаажуулсан захиалга харах
           </div>
           <div
             className={style.card}
-            onClick={() => dispatch(getAdminRequest({ pageNum: 0, pageSize: 0, status: 'declined' }))}
+            onClick={() => [dispatch(getAdminRequest({ pageNum: 0, pageSize: 0, status: 'declined' })), setType(2)]}
+            style={{ backgroundColor: type === 2 ? '#52769A' : '#9EB6CD' }}
           >
             Цуцалсан захиалга
           </div>

@@ -526,7 +526,6 @@ const Index = () => {
     beforeUpload: beforeUploadSingle,
     onChange: handleUploadSingle,
   };
-  console.log(devices);
   return (
     <div>
       <div className={style.cards}>

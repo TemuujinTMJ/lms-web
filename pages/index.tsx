@@ -72,6 +72,7 @@ const Home = () => {
       } else failedLogin();
     });
   }
+
   return (
     <>
       <Head>
@@ -159,7 +160,7 @@ const Home = () => {
             <div className={style.input}>
               <Image src="/icons/mail.png" alt="" width={20} height={20} />
               <Input
-                placeholder="Нэвтрэх нэр"
+                placeholder="e-mail"
                 bordered={false}
                 required
                 value={username}
@@ -175,7 +176,7 @@ const Home = () => {
                 value={password}
                 onChange={(e) => setPassword(e?.target?.value)}
               />
-              <div className={style.reset}>Нууц үг мартсан</div>
+              {/* <div className={style.reset}>Нууц үг мартсан</div> */}
             </div>
             <div className={style.btn}>
               <div>
@@ -219,7 +220,7 @@ const Home = () => {
                 value={password}
                 onChange={(e) => setPassword(e?.target?.value)}
               />
-              <div className={style.reset}>Нууц үг мартсан</div>
+              {/* <div className={style.reset}>Нууц үг мартсан</div> */}
             </div>
             <div className={style.btn}>
               <div></div>
@@ -231,7 +232,7 @@ const Home = () => {
         )}
         <Modal
           title="Шинээр хэрэглэгчийн бүртгэл үүсгэх"
-          style={{ top: 20 }}
+          style={{ top: 100 }}
           open={modal1Open}
           onCancel={() => setModal1Open(false)}
           footer={false}
@@ -265,8 +266,8 @@ const Home = () => {
             <Form.Item label="Нууц үг давтах" required name="rePassword">
               <Input.Password />
             </Form.Item>
-            <Form.Item>
-              <Button type="primary" htmlType="submit" loading={loadingSignup}>
+            <Form.Item style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <Button type="primary" htmlType="submit" loading={loadingSignup} style={{ background: '#4d7197' }}>
                 Бүртгүүлэх
               </Button>
             </Form.Item>
